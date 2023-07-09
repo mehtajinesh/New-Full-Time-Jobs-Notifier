@@ -11,29 +11,37 @@ from utils import get_past_date
 from constants import FUZZY_RATIO_MATCH, DAYS_TO_CHECK
 
 
-def get_relevant_jobs(company_name: str, search_api_type, search_api_url: str, keywords: List[str], search_api_header, session) -> Dict:
+def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: str, keywords: List[str], search_api_header: Dict, session) -> Dict:
+    """gets the relevant jobs from the company's career page
+
+    Args:
+        company_name (str): company name
+        search_api_type (str): search api type
+        search_api_url (str): search api url
+        keywords (List[str]): list of keywords to search from
+        search_api_header (Dict): search api header
+        session (request): requests session object
+
+    Returns:
+        Dict: _description_
+    """
     relevant_jobs = {}
     for keyword in keywords:
         if search_api_type == "GET":
             # Push the keyword to the url (replace it with curly brackets)
             # Update the search url with the keywords
-            updated_search_api_url = search_api_url.replace(
+            search_api_url = search_api_url.replace(
                 "{}", urllib.parse.quote(keyword))
             # For each keyword, get the job details using keyword, api and headers
             logging.info(
                 f'Fetching data from {company_name} for keyword: {keyword} ...')
-            response = get_response_for_search_url(
-                updated_search_api_url, session)
         else:
-            search_api_header = search_api_header.replace("{}", keyword.replace(" ","+").lower())
-            req = session.post(url=search_api_url, json=search_api_header)
+            search_api_header['searchText'] = keyword.replace(" ", "+").lower()
+            # For each keyword, get the job details using keyword, api and headers
             logging.info(
-                f'Data fetched from search with response status code: '
-                + str(req.status_code))
-            if "text/html" in req.headers['Content-Type']:
-                response = req.text
-            else:
-                response = req.json()
+                f'Fetching data from {company_name} for keyword: {keyword} ...')
+        response = get_response_for_search_url(search_api_type,
+                                               search_api_url, session, search_api_header)
         if company_name == 'Amazon':
             relevant_jobs.update(for_amazon(keyword, response))
         elif company_name == 'Netflix':
@@ -42,37 +50,52 @@ def get_relevant_jobs(company_name: str, search_api_type, search_api_url: str, k
             relevant_jobs.update(for_apple(keyword, response, session))
         elif company_name == 'Microsoft':
             relevant_jobs.update(for_microsoft(
-                keyword, updated_search_api_url, response, session))
+                keyword, search_api_url, response, session))
         elif company_name == 'Tencent':
             relevant_jobs.update(for_tencent(keyword, response))
         elif company_name == 'Oracle':
             relevant_jobs.update(for_oracle(keyword, response))
         if company_name == 'Nvidia':
-            relevant_jobs.update(for_nvidia(keyword, response))
+            relevant_jobs.update(for_nvidia(
+                keyword, search_api_url, response, search_api_header, session))
 
     return relevant_jobs
 
-def get_response_for_search_url(search_api_url:str, session):
+
+def get_response_for_search_url(search_type: str, search_api_url: str, session, search_api_header: Dict = ""):
     """gets the page response from the given search api url
 
     Args:
+        search_type (str): search type
         search_api_url (str): search api url
         session (request): session object
+        search_api_header (Dict): search api headers
 
     Returns:
         request: response from the page
     """
-    req = session.get(url=search_api_url)
-    logging.info(
-        f'Data fetched from search with response status code: '
-        + str(req.status_code))
-    if "text/html" in req.headers['Content-Type']:
-        response = req.text
+    if search_type == "POST":
+        req = session.post(url=search_api_url, json=search_api_header)
+        logging.info(
+            f'Data fetched from search with response status code: '
+            + str(req.status_code))
+        if "text/html" in req.headers['Content-Type']:
+            response = req.text
+        else:
+            response = req.json()
     else:
-        response = req.json()
+        req = session.get(url=search_api_url)
+        logging.info(
+            f'Data fetched from search with response status code: '
+            + str(req.status_code))
+        if "text/html" in req.headers['Content-Type']:
+            response = req.text
+        else:
+            response = req.json()
     return response
 
-def for_amazon(keyword:str, response:Dict)-> Dict[str, Dict]:
+
+def for_amazon(keyword: str, response: Dict) -> Dict[str, Dict]:
     """logic for getting jobs from amazon careers page response
 
     Args:
@@ -97,7 +120,8 @@ def for_amazon(keyword:str, response:Dict)-> Dict[str, Dict]:
                     'title': curr_job_title, 'posted_date': posted_date, 'apply': job['url_next_step']}
     return relevant_jobs
 
-def for_netflix(keyword:str, response:Dict)-> Dict[str, Dict]:
+
+def for_netflix(keyword: str, response: Dict) -> Dict[str, Dict]:
     """gets all the revelant jobs from netflix's careers page
 
     Args:
@@ -122,14 +146,15 @@ def for_netflix(keyword:str, response:Dict)-> Dict[str, Dict]:
                     'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://jobs.netflix.com/jobs/{job_id}"}
     return relevant_jobs
 
-def for_apple(keyword:str, response:Dict, session)-> Dict[str, Dict]:
+
+def for_apple(keyword: str, response: Dict, session) -> Dict[str, Dict]:
     """gets the job positions from apple's career page
 
     Args:
         keyword (str): keyword to match with job title
         response (Dict): page response
         session (request): request session object
-    
+
     Returns:
         [str, Dict]: relevant jobs
     """
@@ -145,7 +170,7 @@ def for_apple(keyword:str, response:Dict, session)-> Dict[str, Dict]:
                 date_difference = today - posted_date
                 if date_difference.days < DAYS_TO_CHECK:
                     page_relevant_jobs[job_id] = {
-                        'title': curr_job_title, 'posted_date': posted_date, 
+                        'title': curr_job_title, 'posted_date': posted_date,
                         'apply': f"https://jobs.apple.com/en-us/details/{job_id}/{job['transformedPostingTitle']}?team={job['team']['teamCode']}"}
         return page_relevant_jobs
 
@@ -172,7 +197,7 @@ def for_apple(keyword:str, response:Dict, session)-> Dict[str, Dict]:
         curr_page_count = 2
         while (curr_page_count < 3):
             new_url = org_url + f'&page={curr_page_count}'
-            new_response = get_response_for_search_url(new_url, session)
+            new_response = get_response_for_search_url("GET", new_url, session)
             new_relevant_jobs, no_of_pages, org_url = get_relevant_jobs_from_html_response(
                 new_response, keyword)
             relevant_jobs.update(get_relevant_jobs_from_page(
@@ -180,7 +205,8 @@ def for_apple(keyword:str, response:Dict, session)-> Dict[str, Dict]:
             curr_page_count += 1
     return relevant_jobs
 
-def for_microsoft(keyword:str, search_api_url:str, response:Dict, session) -> Dict[str, Dict]:
+
+def for_microsoft(keyword: str, search_api_url: str, response: Dict, session) -> Dict[str, Dict]:
     """gets the job information from microsoft's career page
 
     Args:
@@ -188,7 +214,7 @@ def for_microsoft(keyword:str, search_api_url:str, response:Dict, session) -> Di
         search_api_url (str): search api url for apple's career page
         response (Dict): initial response from the search api url
         session (request): request session object 
-    
+
     Returns:
         [str, Dict]: relevant jobs
     """
@@ -216,14 +242,15 @@ def for_microsoft(keyword:str, search_api_url:str, response:Dict, session) -> Di
         curr_page_count = 2
         while (curr_page_count < no_of_pages + 1):
             new_url = search_api_url + f'&pg={curr_page_count}'
-            new_response = get_response_for_search_url(new_url, session)
+            new_response = get_response_for_search_url("GET", new_url, session)
             new_relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
                 new_response, keyword)
             relevant_jobs.update(new_relevant_jobs)
             curr_page_count += 1
     return relevant_jobs
 
-def for_tencent(keyword:str, response:Dict)-> Dict[str, Dict]:
+
+def for_tencent(keyword: str, response: Dict) -> Dict[str, Dict]:
     """get the jobs from tencent's career page
 
     Args:
@@ -248,11 +275,42 @@ def for_tencent(keyword:str, response:Dict)-> Dict[str, Dict]:
                     'title': curr_job_title, 'posted_date': posted_date, 'apply': f"{job['PostURL']}"}
     return relevant_jobs
 
-def for_nvidia(keyword:str, response:Dict)-> Dict[str, Dict]:
-    relevant_jobs = {}
+
+def for_nvidia(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    def get_relevant_jobs_from_json_response(page_response, keyword):
+        page_relevant_jobs = {}
+        total_jobs = page_response["total"]
+        no_of_pages = math.ceil(total_jobs / 20)
+        page_available_jobs = page_response["jobPostings"]
+        for job in page_available_jobs:
+            job_id = job['bulletFields'][0]
+            curr_job_title = job['title']
+            posted_date = get_past_date(job['postedOn'].replace(
+                "Posted ", "").replace("+", "").lower())
+            today = date.today()
+            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                date_difference = today - posted_date
+                if date_difference.days < DAYS_TO_CHECK:
+                    page_relevant_jobs[job_id] = {
+                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://nvidia.wd5.myworkdayjobs.com/en-US/NVIDIAExternalCareerSite{job['externalPath']}"}
+        return page_relevant_jobs, no_of_pages
+
+    relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
+        response, keyword)
+    if no_of_pages > 1:
+        curr_page_count = 2
+        while (curr_page_count < 5):
+            search_api_header['offset'] += 20
+            new_response = get_response_for_search_url(
+                "POST", search_api_url, session, search_api_header)
+            new_relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
+                new_response, keyword)
+            relevant_jobs.update(new_relevant_jobs)
+            curr_page_count += 1
     return relevant_jobs
 
-def for_oracle(keyword:str, response:Dict)-> Dict[str, Dict]:
+
+def for_oracle(keyword: str, response: Dict) -> Dict[str, Dict]:
     """gets the job information from oracle's career page
 
     Args:

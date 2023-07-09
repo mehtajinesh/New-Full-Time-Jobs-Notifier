@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 from typing import Dict
 from dotenv import load_dotenv
 import logging
@@ -10,10 +11,11 @@ from constants import COMPANY_NAMES_CSV, \
     COMPANY_SEARCH_API_HEADER_CSV, \
     COMPANY_KEYWORDS_CSV, COMPANY_SEARCH_API_CSV, \
     COMPANY_KNOWN_JOBS_CSV, LOG_FILE_LOCATION,\
-SLACK_DEPLOYMENT_NOTIFICATION_WEBHOOK_VAR,\
-SLACK_ERROR_NOTIFICATION_WEBHOOK_VAR,\
-SLACK_JOB_NOTIFICATION_WEBHOOK_VAR
+    SLACK_DEPLOYMENT_NOTIFICATION_WEBHOOK_VAR,\
+    SLACK_ERROR_NOTIFICATION_WEBHOOK_VAR,\
+    SLACK_JOB_NOTIFICATION_WEBHOOK_VAR
 from job_checker import get_relevant_jobs
+
 
 def get_company_data():
     company_info = {}
@@ -43,8 +45,12 @@ def get_company_data():
     with open(COMPANY_SEARCH_API_HEADER_CSV, newline='') as company_header_csvfile:
         reader = csv.DictReader(company_header_csvfile, delimiter='|')
         for row in reader:
-            company_info[row['CompanyID']].update({
-                'SearchHeader': row['SearchHeader']})
+            if row['SearchHeader'] == "":
+                company_info[row['CompanyID']].update({
+                    'SearchHeader': row['SearchHeader']})
+            else:
+                company_info[row['CompanyID']].update({
+                    'SearchHeader': json.loads(row['SearchHeader'])})
     # Get company known jobs
     with open(COMPANY_KNOWN_JOBS_CSV, newline='') as company_known_csvfile:
         reader = csv.DictReader(company_known_csvfile)
@@ -54,8 +60,8 @@ def get_company_data():
     return company_info
 
 
-def send_deployment_notification_to_user(notification_type:str,
-                                         notification_message:str, session):
+def send_deployment_notification_to_user(notification_type: str,
+                                         notification_message: str, session):
     """sends the deployment notification to user
 
     Args:
@@ -72,7 +78,7 @@ def send_deployment_notification_to_user(notification_type:str,
         + str(req.status_code))
 
 
-def send_error_notification_to_user(notification_message:str, session):
+def send_error_notification_to_user(notification_message: str, session):
     """sends the error notification to user
 
     Args:
@@ -88,9 +94,9 @@ def send_error_notification_to_user(notification_message:str, session):
         + str(req.status_code))
 
 
-def send_notification_to_user(company_name:str, job_id:str, 
-                              job_title:str, job_posted_date:str, 
-                              job_application_link:str, session):
+def send_notification_to_user(company_name: str, job_id: str,
+                              job_title: str, job_posted_date: str,
+                              job_application_link: str, session):
     """sends the notification to the user for the company position with details
 
     Args:
@@ -106,14 +112,14 @@ def send_notification_to_user(company_name:str, job_id:str,
                            'Content-type': 'application/json'},
                        json={
                            'text': f'Company Name: *{company_name}*\nJob Id: *{job_id}*\nJob Title: *{job_title}*\nPosted Date: *{job_posted_date.strftime("%m/%d/%Y")}*\nApply: <{job_application_link}>\n----------\n'
-                       }
-                       )
+    }
+    )
     logging.info(
         'notification sent to deployment with response status code: '
         + str(req.status_code))
 
 
-def update_known_jobs(company_info:Dict[str,str]):
+def update_known_jobs(company_info: Dict[str, str]):
     """updated the newly found known job in the csv file
 
     Args:
@@ -131,7 +137,8 @@ def update_known_jobs(company_info:Dict[str,str]):
 
 
 def main():
-    logging.basicConfig(filename=LOG_FILE_LOCATION, level=logging.DEBUG, filemode='w')
+    logging.basicConfig(filename=LOG_FILE_LOCATION,
+                        level=logging.DEBUG, filemode='w')
     load_dotenv()
     with requests.session() as session:
         current_date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
@@ -146,14 +153,15 @@ def main():
                 # Get the keywords for this company
                 keywords = company_info[company_id]['Keywords']
                 if keywords == ['']:
-                    logging.info(f"Bypassing {company_name} as information not available")
+                    logging.info(
+                        f"Bypassing {company_name} as information not available")
                     continue
                 # Get the search API url
                 search_api_url = company_info[company_id]['SearchAPI']
                 search_api_type = company_info[company_id]['SearchType']
                 search_api_header = company_info[company_id]['SearchHeader']
                 known_jobs = company_info[company_id]['KnownJobs'].split('|')
-                relevant_jobs = get_relevant_jobs(company_name, search_api_type, 
+                relevant_jobs = get_relevant_jobs(company_name, search_api_type,
                                                   search_api_url, keywords, search_api_header, session)
                 if len(relevant_jobs) < 1:
                     continue
@@ -167,7 +175,7 @@ def main():
                         logging.info(
                             f'New job found: {job_title} posted on : {job_posted_date} for company:{company_name}. Notifying user ...')
                         # send notification
-                        send_notification_to_user(company_name, job_id, job_title, 
+                        send_notification_to_user(company_name, job_id, job_title,
                                                   job_posted_date, job_application_link, session)
                         # save the job id to known jobs list
                         known_jobs.append(job_id)
@@ -182,7 +190,8 @@ def main():
             current_date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             logging.error(f'Error occurred: {e}')
             # send error notification to user
-            send_error_notification_to_user(f"{current_date_time} - {e}", session)
+            send_error_notification_to_user(
+                f"{current_date_time} - {e}", session)
 
 
 if __name__ == '__main__':
