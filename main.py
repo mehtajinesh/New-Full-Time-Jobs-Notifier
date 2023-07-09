@@ -119,7 +119,7 @@ def update_known_jobs(company_info:Dict[str,str]):
     Args:
         company_info (Dict[str,str]): company name and its new job ids
     """
-    with open(COMPANY_KNOWN_JOBS_CSV, 'w') as company_known_csvfile:
+    with open(COMPANY_KNOWN_JOBS_CSV, 'w', newline='') as company_known_csvfile:
         # create the csv writer
         writer = csv.writer(company_known_csvfile)
         # write a row to the csv file
@@ -182,7 +182,7 @@ def main():
             current_date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             logging.error(f'Error occurred: {e}')
             # send error notification to user
-            send_error_notification_to_user(f"{current_date_time} - {e}")
+            send_error_notification_to_user(f"{current_date_time} - {e}", session)
 
 
 if __name__ == '__main__':
