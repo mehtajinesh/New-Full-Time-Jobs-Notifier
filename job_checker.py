@@ -62,6 +62,14 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
         elif company_name == 'Salesforce':
             relevant_jobs.update(for_salesforce(
                 keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+        elif company_name == 'Adobe':
+            relevant_jobs.update(for_adobe(
+                keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+        elif company_name == 'AstraZeneca':
+            relevant_jobs.update(for_astrazeneca(
+                keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+        elif company_name == 'DeepMind':
+            relevant_jobs.update(for_deepmind(keyword, response))
     return relevant_jobs
 
 
@@ -394,4 +402,124 @@ def for_salesforce(keyword: str, search_api_url: str, response: Dict, search_api
                 new_response, keyword)
             relevant_jobs.update(new_relevant_jobs)
             curr_page_count += 1
+    return relevant_jobs
+
+
+def for_adobe(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets all the relevant jobs from the adobe career's page
+
+    Args:
+        keyword (str): keyword to match for job
+        search_api_url (str): search api url
+        response (Dict): response for the initial query
+        search_api_header (Dict): search api header
+        session (_type_): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs for adobe
+    """
+    def get_relevant_jobs_from_json_response(page_response, keyword):
+        page_relevant_jobs = {}
+        total_jobs = page_response["total"]
+        no_of_pages = math.ceil(total_jobs / 20)
+        page_available_jobs = page_response["jobPostings"]
+        for job in page_available_jobs:
+            job_id = job['bulletFields'][0]
+            curr_job_title = job['title']
+            posted_date = get_past_date(job['postedOn'].replace(
+                "Posted ", "").replace("+", "").lower())
+            today = date.today()
+            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                date_difference = today - posted_date
+                if date_difference.days < DAYS_TO_CHECK:
+                    page_relevant_jobs[job_id] = {
+                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://adobe.wd5.myworkdayjobs.com/en-US/external_experienced{job['externalPath']}"}
+        return page_relevant_jobs, no_of_pages
+
+    relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
+        response, keyword)
+    if no_of_pages > 1:
+        curr_page_count = 2
+        while (curr_page_count < min(no_of_pages, 5)):
+            search_api_header['offset'] += 20
+            new_response = get_response_for_search_url(
+                "POST", search_api_url, session, search_api_header)
+            new_relevant_jobs, new_pages = get_relevant_jobs_from_json_response(
+                new_response, keyword)
+            relevant_jobs.update(new_relevant_jobs)
+            curr_page_count += 1
+    return relevant_jobs
+
+
+def for_astrazeneca(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets all the relevant jobs from the astrazeneca career's page
+
+    Args:
+        keyword (str): keyword to match for job
+        search_api_url (str): search api url
+        response (Dict): response for the initial query
+        search_api_header (Dict): search api header
+        session (_type_): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs for astrazeneca
+    """
+    def get_relevant_jobs_from_json_response(page_response, keyword):
+        page_relevant_jobs = {}
+        total_jobs = page_response["total"]
+        no_of_pages = math.ceil(total_jobs / 20)
+        page_available_jobs = page_response["jobPostings"]
+        for job in page_available_jobs:
+            job_id = job['bulletFields'][0]
+            curr_job_title = job['title']
+            posted_date = get_past_date(job['postedOn'].replace(
+                "Posted ", "").replace("+", "").lower())
+            today = date.today()
+            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                date_difference = today - posted_date
+                if date_difference.days < DAYS_TO_CHECK:
+                    page_relevant_jobs[job_id] = {
+                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://astrazeneca.wd3.myworkdayjobs.com/en-US/Careers{job['externalPath']}"}
+        return page_relevant_jobs, no_of_pages
+
+    relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
+        response, keyword)
+    if no_of_pages > 1:
+        curr_page_count = 2
+        while (curr_page_count < min(no_of_pages, 5)):
+            search_api_header['offset'] += 20
+            new_response = get_response_for_search_url(
+                "POST", search_api_url, session, search_api_header)
+            new_relevant_jobs, new_pages = get_relevant_jobs_from_json_response(
+                new_response, keyword)
+            relevant_jobs.update(new_relevant_jobs)
+            curr_page_count += 1
+    return relevant_jobs
+
+
+def for_deepmind(keyword: str, response: Dict) -> Dict[str, Dict]:
+    """logic for getting jobs from amazon careers page response
+
+    Args:
+        keyword (str): keyword for job title matching
+        response (Dict): raw response from the website
+
+    Returns:
+        Dict[str, Dict]: relevant jobs where key is jobID and value is jobInformation
+    """
+    relevant_jobs = {}
+    available_jobs = response['jobs']
+    for job in available_jobs:
+        job_id = job['id']
+        curr_job_title = job['title']
+        posted_date = datetime.strptime(
+            job['updated_at'], "%Y-%m-%dT%H:%M:%S%z").date()
+        today = date.today()
+        location = job['location']['name']
+        if "US" in location:
+            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                date_difference = today - posted_date
+                if date_difference.days < DAYS_TO_CHECK:
+                    relevant_jobs[job_id] = {
+                        'title': curr_job_title, 'posted_date': posted_date, 'apply': job['absolute_url']}
     return relevant_jobs

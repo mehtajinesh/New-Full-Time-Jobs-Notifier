@@ -14,7 +14,7 @@ CompanyID,Type,SearchAPI
 13,POST,https://salesforce.wd12.myworkdayjobs.com/wday/cxs/salesforce/External_Career_Site/jobs
 14,GET,
 15,GET,
-16,GET,
+16,POST,https://adobe.wd5.myworkdayjobs.com/wday/cxs/adobe/external_experienced/jobs
 17,GET,
 18,GET,
 19,GET,
@@ -67,3 +67,5 @@ CompanyID,Type,SearchAPI
 66,GET,
 67,GET,
 68,GET,
+69,POST,https://astrazeneca.wd3.myworkdayjobs.com/wday/cxs/astrazeneca/Careers/jobs
+70,GET,https://api.greenhouse.io/v1/boards/deepmind/embed/jobs

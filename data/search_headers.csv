@@ -14,7 +14,7 @@ CompanyID|SearchHeader
 13|{"appliedFacets":{"CF_-_REC_-_LRV_-_Job_Posting_Anchor_-_Country_from_Job_Posting_Location_Extended":["bc33aa3152ec42d4995f4791a106ed09"],"timeType":["0e28126347c3100fe3b402cf26290000"]},"limit":20,"offset":0,"searchText":"{}"}
 14|
 15|
-16|
+16|{"appliedFacets":{"locationCountry":["bc33aa3152ec42d4995f4791a106ed09"]},"limit":20,"offset":0,"searchText":"{}"}
 17|
 18|
 19|
@@ -67,3 +67,5 @@ CompanyID|SearchHeader
 66|
 67|
 68|
+69|{"appliedFacets":{"locations":["567b3426fd960124eeba0dbd8d37a05f","b914f96b1779102cc9746a867dbfb2c5","b914f96b1779102cc97453963e19b2a7","1503eab488d5011f7c237683c12ee54a","4497ee3db3de1043e772c47dc515206d","567b3426fd9601916f61f4bc8d378c5f","567b3426fd96015bf9a607bd8d379b5f","b914f96b1779102cc97479ca48a4b2d9","567b3426fd9601e2dd763dc18d37d962","ff2133cb5404108b79cae05325d679bb","567b3426fd960166631f3fc38d376464","567b3426fd9601d7293f46c38d376964","b914f96b1779102cc974801c22c6b2e3"],"jobFamilyGroup":["393c2066a4c001e1024ae40eae000c27","b914f96b1779102cc4a9bfc4484d935a","b914f96b1779102cc4a9d3cd99dd9364"]},"limit":20,"offset":0,"searchText":"{}"}
+70|

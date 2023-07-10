@@ -152,6 +152,8 @@ def main():
             company_info = get_company_data()
             # -- Fetching New Data --
             for company_id in company_info:
+                if company_id != '70':
+                    continue
                 company_name = company_info[company_id]['CompanyName']
                 # Get the keywords for this company
                 keywords = company_info[company_id]['Keywords']
