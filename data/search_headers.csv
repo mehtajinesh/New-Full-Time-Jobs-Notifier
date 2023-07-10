@@ -11,7 +11,7 @@ CompanyID|SearchHeader
 10|
 11|{"appliedFacets":{"locationHierarchy1":["2fcb99c455831013ea52fb338f2932d8"],"timeType":["5509c0b5959810ac0029943377d47364"]},"limit":20,"offset":0,"searchText":"{}"}
 12|
-13|
+13|{"appliedFacets":{"CF_-_REC_-_LRV_-_Job_Posting_Anchor_-_Country_from_Job_Posting_Location_Extended":["bc33aa3152ec42d4995f4791a106ed09"],"timeType":["0e28126347c3100fe3b402cf26290000"]},"limit":20,"offset":0,"searchText":"{}"}
 14|
 15|
 16|

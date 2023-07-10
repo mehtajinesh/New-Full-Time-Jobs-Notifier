@@ -11,7 +11,7 @@ CompanyID,Type,SearchAPI
 10,GET,https://careers.tencent.com/tencentcareer/api/post/Query?timestamp=1688787924998&countryId=2&cityId=&bgIds=&productId=&categoryId=&parentCategoryId=&attrId=&keyword={}&pageIndex=1&pageSize=100&language=en-us&area=us
 11,POST,https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCareerSite/jobs
 12,GET,"https://eeho.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions?onlyData=true&expand=requisitionList.secondaryLocations,flexFieldsFacet.values&finder=findReqs;siteNumber=CX_45001,facetsList=LOCATIONS%3BWORK_LOCATIONS%3BWORKPLACE_TYPES%3BTITLES%3BCATEGORIES%3BORGANIZATIONS%3BPOSTING_DATES%3BFLEX_FIELDS,limit=14,keyword={},lastSelectedFacet=POSTING_DATES,locationId=300000000149325,selectedFlexFieldsFacets=%22AttributeChar6%7C3%20to%205%2B%20years%3B0%20to%202%2B%20years%7C%7CAttributeChar12%7CLess%20than%2010%20applicants%22,selectedLocationsFacet=300000000149325,selectedPostingDatesFacet=7,sortBy=POSTING_DATES_DESC"
-13,GET,
+13,POST,https://salesforce.wd12.myworkdayjobs.com/wday/cxs/salesforce/External_Career_Site/jobs
 14,GET,
 15,GET,
 16,GET,
