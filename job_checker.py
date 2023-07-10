@@ -70,6 +70,8 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
                 keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
         elif company_name == 'DeepMind':
             relevant_jobs.update(for_deepmind(keyword, response))
+        elif company_name == 'JaneStreet':
+            relevant_jobs.update(for_janestreet(keyword, response))
     return relevant_jobs
 
 
@@ -522,4 +524,27 @@ def for_deepmind(keyword: str, response: Dict) -> Dict[str, Dict]:
                 if date_difference.days < DAYS_TO_CHECK:
                     relevant_jobs[job_id] = {
                         'title': curr_job_title, 'posted_date': posted_date, 'apply': job['absolute_url']}
+    return relevant_jobs
+
+
+def for_janestreet(keyword: str, response: Dict) -> Dict[str, Dict]:
+    """gets all the revelant jobs from janestreet's careers page
+
+    Args:
+        keyword (str): keyword to match in job title
+        response (Dict): raw response from janestreet's page
+
+    Returns:
+        Dict[str, Dict]: relevant positions with their information
+    """
+    relevant_jobs = {}
+    for job in response:
+        job_id = job['id']
+        curr_job_title = job['position']
+        city = job['city']
+        today = date.today()
+        if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+            if city == "NYC":
+                relevant_jobs[job_id] = {
+                    'title': curr_job_title, 'posted_date': today, 'apply': f"https://www.janestreet.com/join-jane-street/position/{job_id}"}
     return relevant_jobs

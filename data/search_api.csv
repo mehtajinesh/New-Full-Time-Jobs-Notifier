@@ -69,3 +69,4 @@ CompanyID,Type,SearchAPI
 68,GET,
 69,POST,https://astrazeneca.wd3.myworkdayjobs.com/wday/cxs/astrazeneca/Careers/jobs
 70,GET,https://api.greenhouse.io/v1/boards/deepmind/embed/jobs
+71,GET,https://www.janestreet.com/jobs/main.json
