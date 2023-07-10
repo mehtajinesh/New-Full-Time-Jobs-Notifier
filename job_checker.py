@@ -1,3 +1,4 @@
+import copy
 import math
 from typing import Dict, List
 import urllib
@@ -57,7 +58,7 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
             relevant_jobs.update(for_oracle(keyword, response))
         if company_name == 'Nvidia':
             relevant_jobs.update(for_nvidia(
-                keyword, search_api_url, response, search_api_header, session))
+                keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
 
     return relevant_jobs
 
