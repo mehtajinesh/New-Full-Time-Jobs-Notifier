@@ -13,7 +13,8 @@ from constants import COMPANY_NAMES_CSV, \
     COMPANY_KNOWN_JOBS_CSV, LOG_FILE_LOCATION,\
     SLACK_DEPLOYMENT_NOTIFICATION_WEBHOOK_VAR,\
     SLACK_ERROR_NOTIFICATION_WEBHOOK_VAR,\
-    SLACK_JOB_NOTIFICATION_WEBHOOK_VAR
+    SLACK_JOB_NOTIFICATION_WEBHOOK_VAR,\
+    LOG_FOLDER_LOCATION
 from job_checker import get_relevant_jobs
 
 
@@ -137,6 +138,8 @@ def update_known_jobs(company_info: Dict[str, str]):
 
 
 def main():
+    if not os.path.exists(LOG_FOLDER_LOCATION):
+        os.makedirs(LOG_FOLDER_LOCATION)
     logging.basicConfig(filename=LOG_FILE_LOCATION,
                         level=logging.DEBUG, filemode='w')
     load_dotenv()
