@@ -324,7 +324,7 @@ def for_nvidia(keyword: str, search_api_url: str, response: Dict, search_api_hea
         response, keyword)
     if no_of_pages > 1:
         curr_page_count = 2
-        while (curr_page_count < min(no_of_pages, 5)):
+        while (curr_page_count < min(no_of_pages+1, 5)):
             search_api_header['offset'] += 20
             new_response = get_response_for_search_url(
                 "POST", search_api_url, session, search_api_header)
@@ -396,7 +396,7 @@ def for_salesforce(keyword: str, search_api_url: str, response: Dict, search_api
         response, keyword)
     if no_of_pages > 1:
         curr_page_count = 2
-        while (curr_page_count < min(no_of_pages, 5)):
+        while (curr_page_count < min(no_of_pages+1, 5)):
             search_api_header['offset'] += 20
             new_response = get_response_for_search_url(
                 "POST", search_api_url, session, search_api_header)
@@ -442,7 +442,7 @@ def for_adobe(keyword: str, search_api_url: str, response: Dict, search_api_head
         response, keyword)
     if no_of_pages > 1:
         curr_page_count = 2
-        while (curr_page_count < min(no_of_pages, 5)):
+        while (curr_page_count < min(no_of_pages+1, 5)):
             search_api_header['offset'] += 20
             new_response = get_response_for_search_url(
                 "POST", search_api_url, session, search_api_header)
@@ -488,7 +488,7 @@ def for_astrazeneca(keyword: str, search_api_url: str, response: Dict, search_ap
         response, keyword)
     if no_of_pages > 1:
         curr_page_count = 2
-        while (curr_page_count < min(no_of_pages, 5)):
+        while (curr_page_count < min(no_of_pages+1, 5)):
             search_api_header['offset'] += 20
             new_response = get_response_for_search_url(
                 "POST", search_api_url, session, search_api_header)
@@ -539,7 +539,7 @@ def for_janestreet(keyword: str, response: Dict) -> Dict[str, Dict]:
     """
     relevant_jobs = {}
     for job in response:
-        job_id = job['id']
+        job_id = str(job['id'])
         curr_job_title = job['position']
         city = job['city']
         today = date.today()
