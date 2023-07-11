@@ -430,15 +430,16 @@ def for_adobe(keyword: str, search_api_url: str, response: Dict, search_api_head
         page_available_jobs = page_response["jobPostings"]
         for job in page_available_jobs:
             job_id = job['bulletFields'][0]
-            curr_job_title = job['title']
-            posted_date = get_past_date(job['postedOn'].replace(
-                "Posted ", "").replace("+", "").lower())
-            today = date.today()
-            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-                date_difference = today - posted_date
-                if date_difference.days < DAYS_TO_CHECK:
-                    page_relevant_jobs[job_id] = {
-                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://adobe.wd5.myworkdayjobs.com/en-US/external_experienced{job['externalPath']}"}
+            if 'title' in job:
+                curr_job_title = job['title']
+                posted_date = get_past_date(job['postedOn'].replace(
+                    "Posted ", "").replace("+", "").lower())
+                today = date.today()
+                if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                    date_difference = today - posted_date
+                    if date_difference.days < DAYS_TO_CHECK:
+                        page_relevant_jobs[job_id] = {
+                            'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://adobe.wd5.myworkdayjobs.com/en-US/external_experienced{job['externalPath']}"}
         return page_relevant_jobs, no_of_pages
 
     relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
