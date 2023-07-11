@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import json
 
 from utils import get_past_date
-from constants import FUZZY_RATIO_MATCH, DAYS_TO_CHECK
+from constants import FUZZY_RATIO_MATCH, DAYS_TO_CHECK, TERMS_TO_IGNORE
 
 
 def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: str, keywords: List[str], search_api_header: Dict, session) -> Dict:
@@ -127,10 +127,16 @@ def for_amazon(keyword: str, response: Dict) -> Dict[str, Dict]:
             job['posted_date'], "%B %d, %Y").date()
         today = date.today()
         if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-            date_difference = today - posted_date
-            if date_difference.days < DAYS_TO_CHECK:
-                relevant_jobs[job_id] = {
-                    'title': curr_job_title, 'posted_date': posted_date, 'apply': job['url_next_step']}
+            ignore_position = False
+            for term in TERMS_TO_IGNORE:
+                if term in curr_job_title:
+                    ignore_position = True
+                    break
+            if not ignore_position:
+                date_difference = today - posted_date
+                if date_difference.days < DAYS_TO_CHECK:
+                    relevant_jobs[job_id] = {
+                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://www.amazon.jobs/{job['job_path']}"}
     return relevant_jobs
 
 
@@ -153,10 +159,16 @@ def for_netflix(keyword: str, response: Dict) -> Dict[str, Dict]:
             job['created_at'], "%Y-%m-%dT%H:%M:%S%z").date()
         today = date.today()
         if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-            date_difference = today - posted_date
-            if date_difference.days < DAYS_TO_CHECK:
-                relevant_jobs[job_id] = {
-                    'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://jobs.netflix.com/jobs/{job_id}"}
+            ignore_position = False
+            for term in TERMS_TO_IGNORE:
+                if term in curr_job_title:
+                    ignore_position = True
+                    break
+            if not ignore_position:
+                date_difference = today - posted_date
+                if date_difference.days < DAYS_TO_CHECK:
+                    relevant_jobs[job_id] = {
+                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://jobs.netflix.com/jobs/{job_id}"}
     return relevant_jobs
 
 
@@ -180,11 +192,17 @@ def for_apple(keyword: str, response: Dict, session) -> Dict[str, Dict]:
                 job['postingDate'], "%b %d, %Y").date()
             today = date.today()
             if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-                date_difference = today - posted_date
-                if date_difference.days < DAYS_TO_CHECK:
-                    page_relevant_jobs[job_id] = {
-                        'title': curr_job_title, 'posted_date': posted_date,
-                        'apply': f"https://jobs.apple.com/en-us/details/{job_id}/{job['transformedPostingTitle']}?team={job['team']['teamCode']}"}
+                ignore_position = False
+                for term in TERMS_TO_IGNORE:
+                    if term in curr_job_title:
+                        ignore_position = True
+                        break
+                if not ignore_position:
+                    date_difference = today - posted_date
+                    if date_difference.days < DAYS_TO_CHECK:
+                        page_relevant_jobs[job_id] = {
+                            'title': curr_job_title, 'posted_date': posted_date,
+                            'apply': f"https://jobs.apple.com/en-us/details/{job_id}/{job['transformedPostingTitle']}?team={job['team']['teamCode']}"}
         return page_relevant_jobs
 
     def get_relevant_jobs_from_html_response(page_response, keyword):
@@ -237,16 +255,23 @@ def for_microsoft(keyword: str, search_api_url: str, response: Dict, session) ->
         no_of_pages = math.ceil(total_jobs / 20)
         page_available_jobs = page_response["operationResult"]["result"]["jobs"]
         for job in page_available_jobs:
-            job_id = job['jobId']
-            curr_job_title = job['title']
-            posted_date = datetime.strptime(
-                job['postingDate'], "%Y-%m-%dT%H:%M:%S%z").date()
-            today = date.today()
-            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-                date_difference = today - posted_date
-                if date_difference.days < DAYS_TO_CHECK:
-                    page_relevant_jobs[job_id] = {
-                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://careers.microsoft.com/us/en/job/{job_id}"}
+            if 'title' in job:
+                job_id = job['jobId']
+                curr_job_title = job['title']
+                posted_date = datetime.strptime(
+                    job['postingDate'], "%Y-%m-%dT%H:%M:%S%z").date()
+                today = date.today()
+                if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                    ignore_position = False
+                    for term in TERMS_TO_IGNORE:
+                        if term in curr_job_title:
+                            ignore_position = True
+                            break
+                    if not ignore_position:
+                        date_difference = today - posted_date
+                        if date_difference.days < DAYS_TO_CHECK:
+                            page_relevant_jobs[job_id] = {
+                                'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://careers.microsoft.com/us/en/job/{job_id}"}
         return page_relevant_jobs, no_of_pages
 
     relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
@@ -282,10 +307,16 @@ def for_tencent(keyword: str, response: Dict) -> Dict[str, Dict]:
             job['LastUpdateTime'], "%B %d,%Y").date()
         today = date.today()
         if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-            date_difference = today - posted_date
-            if date_difference.days < DAYS_TO_CHECK:
-                relevant_jobs[job_id] = {
-                    'title': curr_job_title, 'posted_date': posted_date, 'apply': f"{job['PostURL']}"}
+            ignore_position = False
+            for term in TERMS_TO_IGNORE:
+                if term in curr_job_title:
+                    ignore_position = True
+                    break
+            if not ignore_position:
+                date_difference = today - posted_date
+                if date_difference.days < DAYS_TO_CHECK:
+                    relevant_jobs[job_id] = {
+                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"{job['PostURL']}"}
     return relevant_jobs
 
 
@@ -315,12 +346,16 @@ def for_nvidia(keyword: str, search_api_url: str, response: Dict, search_api_hea
                     "Posted ", "").replace("+", "").lower())
                 today = date.today()
                 if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-                    date_difference = today - posted_date
-                    if date_difference.days < DAYS_TO_CHECK:
-                        page_relevant_jobs[job_id] = {
-                            'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://nvidia.wd5.myworkdayjobs.com/en-US/NVIDIAExternalCareerSite{job['externalPath']}"}
-            else:
-                print(job)
+                    ignore_position = False
+                    for term in TERMS_TO_IGNORE:
+                        if term in curr_job_title:
+                            ignore_position = True
+                            break
+                    if not ignore_position:
+                        date_difference = today - posted_date
+                        if date_difference.days < DAYS_TO_CHECK:
+                            page_relevant_jobs[job_id] = {
+                                'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://nvidia.wd5.myworkdayjobs.com/en-US/NVIDIAExternalCareerSite{job['externalPath']}"}
         return page_relevant_jobs, no_of_pages
 
     relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
@@ -351,16 +386,23 @@ def for_oracle(keyword: str, response: Dict) -> Dict[str, Dict]:
     relevant_jobs = {}
     available_jobs = response['items'][0]['requisitionList']
     for job in available_jobs:
-        job_id = job['Id']
-        curr_job_title = job['Title']
-        posted_date = datetime.strptime(
-            job['PostedDate'], "%Y-%m-%dT%H:%M:%S%z").date()
-        today = date.today()
-        if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-            date_difference = today - posted_date
-            if date_difference.days < DAYS_TO_CHECK:
-                relevant_jobs[job_id] = {
-                    'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://careers.oracle.com/jobs/#en/sites/jobsearch/job/{job_id}"}
+        if 'title' in job:
+            job_id = job['Id']
+            curr_job_title = job['Title']
+            posted_date = datetime.strptime(
+                job['PostedDate'], "%Y-%m-%dT%H:%M:%S%z").date()
+            today = date.today()
+            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                ignore_position = False
+                for term in TERMS_TO_IGNORE:
+                    if term in curr_job_title:
+                        ignore_position = True
+                        break
+                if not ignore_position:
+                    date_difference = today - posted_date
+                    if date_difference.days < DAYS_TO_CHECK:
+                        relevant_jobs[job_id] = {
+                            'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://careers.oracle.com/jobs/#en/sites/jobsearch/job/{job_id}"}
     return relevant_jobs
 
 
@@ -383,16 +425,23 @@ def for_salesforce(keyword: str, search_api_url: str, response: Dict, search_api
         no_of_pages = math.ceil(total_jobs / 20)
         page_available_jobs = page_response["jobPostings"]
         for job in page_available_jobs:
-            job_id = job['bulletFields'][0]
-            curr_job_title = job['title']
-            posted_date = get_past_date(job['postedOn'].replace(
-                "Posted ", "").replace("+", "").lower())
-            today = date.today()
-            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-                date_difference = today - posted_date
-                if date_difference.days < DAYS_TO_CHECK:
-                    page_relevant_jobs[job_id] = {
-                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://salesforce.wd12.myworkdayjobs.com/en-US/External_Career_Site{job['externalPath']}"}
+            if 'title' in job:
+                job_id = job['bulletFields'][0]
+                curr_job_title = job['title']
+                posted_date = get_past_date(job['postedOn'].replace(
+                    "Posted ", "").replace("+", "").lower())
+                today = date.today()
+                if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                    ignore_position = False
+                    for term in TERMS_TO_IGNORE:
+                        if term in curr_job_title:
+                            ignore_position = True
+                            break
+                    if not ignore_position:
+                        date_difference = today - posted_date
+                        if date_difference.days < DAYS_TO_CHECK:
+                            page_relevant_jobs[job_id] = {
+                                'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://salesforce.wd12.myworkdayjobs.com/en-US/External_Career_Site{job['externalPath']}"}
         return page_relevant_jobs, no_of_pages
 
     relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
@@ -429,17 +478,23 @@ def for_adobe(keyword: str, search_api_url: str, response: Dict, search_api_head
         no_of_pages = math.ceil(total_jobs / 20)
         page_available_jobs = page_response["jobPostings"]
         for job in page_available_jobs:
-            job_id = job['bulletFields'][0]
             if 'title' in job:
+                job_id = job['bulletFields'][0]
                 curr_job_title = job['title']
                 posted_date = get_past_date(job['postedOn'].replace(
                     "Posted ", "").replace("+", "").lower())
                 today = date.today()
                 if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-                    date_difference = today - posted_date
-                    if date_difference.days < DAYS_TO_CHECK:
-                        page_relevant_jobs[job_id] = {
-                            'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://adobe.wd5.myworkdayjobs.com/en-US/external_experienced{job['externalPath']}"}
+                    ignore_position = False
+                    for term in TERMS_TO_IGNORE:
+                        if term in curr_job_title:
+                            ignore_position = True
+                            break
+                    if not ignore_position:
+                        date_difference = today - posted_date
+                        if date_difference.days < DAYS_TO_CHECK:
+                            page_relevant_jobs[job_id] = {
+                                'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://adobe.wd5.myworkdayjobs.com/en-US/external_experienced{job['externalPath']}"}
         return page_relevant_jobs, no_of_pages
 
     relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
@@ -477,15 +532,22 @@ def for_astrazeneca(keyword: str, search_api_url: str, response: Dict, search_ap
         page_available_jobs = page_response["jobPostings"]
         for job in page_available_jobs:
             job_id = job['bulletFields'][0]
-            curr_job_title = job['title']
-            posted_date = get_past_date(job['postedOn'].replace(
-                "Posted ", "").replace("+", "").lower())
-            today = date.today()
-            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-                date_difference = today - posted_date
-                if date_difference.days < DAYS_TO_CHECK:
-                    page_relevant_jobs[job_id] = {
-                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://astrazeneca.wd3.myworkdayjobs.com/en-US/Careers{job['externalPath']}"}
+            if 'title' in job:
+                curr_job_title = job['title']
+                posted_date = get_past_date(job['postedOn'].replace(
+                    "Posted ", "").replace("+", "").lower())
+                today = date.today()
+                if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                    ignore_position = False
+                    for term in TERMS_TO_IGNORE:
+                        if term in curr_job_title:
+                            ignore_position = True
+                            break
+                    if not ignore_position:
+                        date_difference = today - posted_date
+                        if date_difference.days < DAYS_TO_CHECK:
+                            page_relevant_jobs[job_id] = {
+                                'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://astrazeneca.wd3.myworkdayjobs.com/en-US/Careers{job['externalPath']}"}
         return page_relevant_jobs, no_of_pages
 
     relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
@@ -517,17 +579,24 @@ def for_deepmind(keyword: str, response: Dict) -> Dict[str, Dict]:
     available_jobs = response['jobs']
     for job in available_jobs:
         job_id = job['id']
-        curr_job_title = job['title']
-        posted_date = datetime.strptime(
-            job['updated_at'], "%Y-%m-%dT%H:%M:%S%z").date()
-        today = date.today()
-        location = job['location']['name']
-        if "US" in location:
-            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-                date_difference = today - posted_date
-                if date_difference.days < DAYS_TO_CHECK:
-                    relevant_jobs[job_id] = {
-                        'title': curr_job_title, 'posted_date': posted_date, 'apply': job['absolute_url']}
+        if 'title' in job:
+            curr_job_title = job['title']
+            posted_date = datetime.strptime(
+                job['updated_at'], "%Y-%m-%dT%H:%M:%S%z").date()
+            today = date.today()
+            location = job['location']['name']
+            if "US" in location:
+                if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                    ignore_position = False
+                    for term in TERMS_TO_IGNORE:
+                        if term in curr_job_title:
+                            ignore_position = True
+                            break
+                    if not ignore_position:
+                        date_difference = today - posted_date
+                        if date_difference.days < DAYS_TO_CHECK:
+                            relevant_jobs[job_id] = {
+                                'title': curr_job_title, 'posted_date': posted_date, 'apply': job['absolute_url']}
     return relevant_jobs
 
 
@@ -548,7 +617,13 @@ def for_janestreet(keyword: str, response: Dict) -> Dict[str, Dict]:
         city = job['city']
         today = date.today()
         if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-            if city == "NYC":
-                relevant_jobs[job_id] = {
-                    'title': curr_job_title, 'posted_date': today, 'apply': f"https://www.janestreet.com/join-jane-street/position/{job_id}"}
+            ignore_position = False
+            for term in TERMS_TO_IGNORE:
+                if term in curr_job_title:
+                    ignore_position = True
+                    break
+            if not ignore_position:
+                if city == "NYC":
+                    relevant_jobs[job_id] = {
+                        'title': curr_job_title, 'posted_date': today, 'apply': f"https://www.janestreet.com/join-jane-street/position/{job_id}"}
     return relevant_jobs

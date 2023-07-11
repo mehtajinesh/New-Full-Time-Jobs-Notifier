@@ -17,3 +17,18 @@ SLACK_JOB_NOTIFICATION_WEBHOOK_VAR = 'SLACK_JOB_NOTIFICATION_WEBHOOK'
 
 FUZZY_RATIO_MATCH = 50
 DAYS_TO_CHECK = 7
+
+# Terms to Ignore
+TERMS_TO_IGNORE = [
+    "Embedded",
+    "Manager",
+    "Principal",
+    "Staff",
+    "Compiler",
+    "Enterprise",
+    "Linux",
+    "Site",
+    "Facilities",
+    "Security",
+    "AV"
+]
