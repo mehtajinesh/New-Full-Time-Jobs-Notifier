@@ -145,56 +145,56 @@ def main():
     load_dotenv()
     with requests.session() as session:
         current_date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        try:
-            send_deployment_notification_to_user(
-                "Info", f'{current_date_time} - Starting the application ...', session)
-            # -- Already Known Stuff --
-            company_info = get_company_data()
-            # -- Fetching New Data --
-            for company_id in company_info:
-                company_name = company_info[company_id]['CompanyName']
-                # Get the keywords for this company
-                keywords = company_info[company_id]['Keywords']
-                if keywords == ['']:
+        # try:
+        send_deployment_notification_to_user(
+            "Info", f'{current_date_time} - Starting the application ...', session)
+        # -- Already Known Stuff --
+        company_info = get_company_data()
+        # -- Fetching New Data --
+        for company_id in company_info:
+            company_name = company_info[company_id]['CompanyName']
+            # Get the keywords for this company
+            keywords = company_info[company_id]['Keywords']
+            if keywords == ['']:
+                logging.info(
+                    f"Bypassing {company_name} as information not available")
+                continue
+            # Get the search API url
+            search_api_url = company_info[company_id]['SearchAPI']
+            search_api_type = company_info[company_id]['SearchType']
+            search_api_header = company_info[company_id]['SearchHeader']
+            known_jobs = company_info[company_id]['KnownJobs'].split('|')
+            relevant_jobs = get_relevant_jobs(company_name, search_api_type,
+                                              search_api_url, keywords, search_api_header, session)
+            if len(relevant_jobs) < 1:
+                continue
+            for job_id in relevant_jobs:
+                # If job not present in the already notified list,
+                # notify it to the user, add that job id to already notified list
+                if job_id not in known_jobs:
+                    job_title = relevant_jobs[job_id]['title']
+                    job_posted_date = relevant_jobs[job_id]['posted_date']
+                    job_application_link = relevant_jobs[job_id]['apply']
                     logging.info(
-                        f"Bypassing {company_name} as information not available")
-                    continue
-                # Get the search API url
-                search_api_url = company_info[company_id]['SearchAPI']
-                search_api_type = company_info[company_id]['SearchType']
-                search_api_header = company_info[company_id]['SearchHeader']
-                known_jobs = company_info[company_id]['KnownJobs'].split('|')
-                relevant_jobs = get_relevant_jobs(company_name, search_api_type,
-                                                  search_api_url, keywords, search_api_header, session)
-                if len(relevant_jobs) < 1:
-                    continue
-                for job_id in relevant_jobs:
-                    # If job not present in the already notified list,
-                    # notify it to the user, add that job id to already notified list
-                    if job_id not in known_jobs:
-                        job_title = relevant_jobs[job_id]['title']
-                        job_posted_date = relevant_jobs[job_id]['posted_date']
-                        job_application_link = relevant_jobs[job_id]['apply']
-                        logging.info(
-                            f'New job found: {job_title} posted on : {job_posted_date} for company:{company_name}. Notifying user ...')
-                        # send notification
-                        send_notification_to_user(company_name, job_id, job_title,
-                                                  job_posted_date, job_application_link, session)
-                        # save the job id to known jobs list
-                        known_jobs.append(job_id)
-                company_info[company_id]['KnownJobs'] = '|'.join(known_jobs)
-            # rewrite the csv file with the new known job list
-            update_known_jobs(company_info)
-            logging.info('All new jobs notified to the user.')
-            current_date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            send_deployment_notification_to_user(
-                "Information", f"{current_date_time} - Application completed successfully.", session)
-        except Exception as e:
-            current_date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            logging.error(f'Error occurred: {e}')
-            # send error notification to user
-            send_error_notification_to_user(
-                f"{current_date_time} - {e}", session)
+                        f'New job found: {job_title} posted on : {job_posted_date} for company:{company_name}. Notifying user ...')
+                    # send notification
+                    send_notification_to_user(company_name, job_id, job_title,
+                                              job_posted_date, job_application_link, session)
+                    # save the job id to known jobs list
+                    known_jobs.append(job_id)
+            company_info[company_id]['KnownJobs'] = '|'.join(known_jobs)
+        # rewrite the csv file with the new known job list
+        update_known_jobs(company_info)
+        logging.info('All new jobs notified to the user.')
+        current_date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        send_deployment_notification_to_user(
+            "Information", f"{current_date_time} - Application completed successfully.", session)
+        # except Exception as e:
+        #     current_date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        #     logging.error(f'Error occurred: {e}')
+        #     # send error notification to user
+        #     send_error_notification_to_user(
+        #         f"{current_date_time} - {e}", session)
 
 
 if __name__ == '__main__':

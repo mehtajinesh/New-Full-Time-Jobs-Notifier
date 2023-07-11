@@ -229,10 +229,9 @@ def for_apple(keyword: str, response: Dict, session) -> Dict[str, Dict]:
         while (curr_page_count < min(5, no_of_pages)):
             new_url = org_url + f'&page={curr_page_count}'
             new_response = get_response_for_search_url("GET", new_url, session)
-            new_relevant_jobs, no_of_pages, org_url = get_relevant_jobs_from_html_response(
+            new_relevant_jobs, new_pages, org_url = get_relevant_jobs_from_html_response(
                 new_response, keyword)
-            relevant_jobs.update(get_relevant_jobs_from_page(
-                new_relevant_jobs, keyword))
+            relevant_jobs.update(new_relevant_jobs)
             curr_page_count += 1
     return relevant_jobs
 
