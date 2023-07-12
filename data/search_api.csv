@@ -26,7 +26,7 @@ CompanyID,Type,SearchAPI
 25,GET,
 26,GET,
 27,GET,
-28,GET,
+28,POST,https://qualcomm.wd5.myworkdayjobs.com/wday/cxs/qualcomm/External/jobs
 29,GET,
 30,GET,
 31,GET,
