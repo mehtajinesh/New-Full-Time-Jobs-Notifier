@@ -21,7 +21,7 @@ CompanyID,CompanyName
 20,Uber
 21,Zoom
 22,Atlassian
-23,
+23,Bloomberg
 24,Alibaba
 25,AMD
 26,Cisco
@@ -70,3 +70,4 @@ CompanyID,CompanyName
 69,AstraZeneca
 70,DeepMind
 71,JaneStreet
+72,Disney
