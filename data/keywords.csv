@@ -8,7 +8,7 @@ CompanyID,Keywords
 7,Software Engineer|Machine Learning Engineer|Data Scientist|Applied Scientist|Research Scientist|NLP
 8,Software Engineer|Machine Learning Engineer|Data Scientist|Applied Scientist|Research Scientist|Backend Engineer|NLP
 9,
-10,Software Engineer|Machine Learning Engineer|Data Scientist|Applied Scientist|Research Scientist|Backend Engineer|NLP
+10,
 11,Software Engineer|Machine Learning|Data Scientist|Applied Scientist|Research Scientist|Backend Engineer|Deep Learning
 12,Senior Software Engineer|Software Engineer|Machine Learning Engineer|Data Scientist|Applied Scientist|Research Scientist|Backend Engineer|NLP
 13,Senior Software Engineer|Software Engineer|Machine Learning Engineer|Data Scientist|Applied Scientist|Research Scientist|Backend Engineer|NLP
@@ -21,7 +21,7 @@ CompanyID,Keywords
 20,
 21,
 22,
-23,
+23,Senior Software Engineer|Software Engineer|Machine Learning Engineer|Data Scientist|Applied Scientist|Research Scientist
 24,
 25,
 26,
@@ -70,3 +70,4 @@ CompanyID,Keywords
 69,Software Engineer|Machine Learning Engineer|Data Scientist|Applied Scientist|Research Scientist
 70,Software Engineer|Machine Learning Engineer|Data Scientist|Applied Scientist|Research Scientist
 71,Software Engineer|Machine Learning|Data Scientist|Applied Scientist|Research Scientist|Quantitative Researcher|Python Developer Tools Engineer
+72,Sr Software Engineer|Software Engineer|Machine Learning Engineer|Data Scientist
