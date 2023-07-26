@@ -6,6 +6,7 @@ import logging
 import csv
 import requests
 import os
+import traceback
 
 from constants import COMPANY_NAMES_CSV, \
     COMPANY_SEARCH_API_HEADER_CSV, \
@@ -194,7 +195,7 @@ def main():
             logging.error(f'Error occurred: {e}')
             # send error notification to user
             send_error_notification_to_user(
-                f"{current_date_time} - {e}", session)
+                f"{current_date_time} - {traceback.format_exc()}", session)
 
 
 if __name__ == '__main__':
