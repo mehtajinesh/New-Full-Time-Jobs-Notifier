@@ -191,6 +191,7 @@ def main():
             send_deployment_notification_to_user(
                 "Information", f"{current_date_time} - Application completed successfully.", session)
         except Exception as e:
+            update_known_jobs(company_info)
             current_date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             logging.error(f'Error occurred: {e}')
             # send error notification to user
