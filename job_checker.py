@@ -187,7 +187,7 @@ def for_deepmind(keyword: str, response: Dict) -> Dict[str, Dict]:
     relevant_jobs = {}
     available_jobs = response['jobs']
     for job in available_jobs:
-        job_id = job['id']
+        job_id = str(job['id'])
         if 'title' in job:
             curr_job_title = job['title']
             posted_date = datetime.strptime(
