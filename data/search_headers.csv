@@ -75,3 +75,5 @@ CompanyID|SearchHeader
 74|{"appliedFacets": {"locations":["f2181f46d1b60184d94157a78f12573e", "f05d1ab69e590126deeaac56421e2680"]}, "limit": 20, "offset": 0, "searchText": "{}"}
 75|{"appliedFacets": {"locationCountry": ["bc33aa3152ec42d4995f4791a106ed09"]},"limit": 20,"offset": 0,"searchText": "{}"}
 76|{"appliedFacets": {"locationCountry": ["bc33aa3152ec42d4995f4791a106ed09"]}, "limit": 20, "offset": 0, "searchText": "{}"}
+77|{"appliedFacets": {"locations": ["89df98528c03103bc2ec3169a804c3b6", "89df98528c03103bc2ecc59c58b4c4c9", "89df98528c03103bc2ec1ca985c4c38e", "0fa7047135aa105868cc9db027aa9b9b", "89df98528c03103bc2ecc85ab17cc4ce"]}, "limit": 20, "offset": 0, "searchText": "{}"}
+78|{"appliedFacets": {"Country": ["bc33aa3152ec42d4995f4791a106ed09"]}, "limit": 20, "offset": 0, "searchText": "{}"}

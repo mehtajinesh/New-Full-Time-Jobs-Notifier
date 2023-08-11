@@ -100,7 +100,12 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
             elif company_name == 'AutoDesk':
                 relevant_jobs.update(for_autodesk(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
-
+            elif company_name == 'Belkin':
+                relevant_jobs.update(for_belkin(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'BlackBerry':
+                relevant_jobs.update(for_blackberry(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
     except JSONDecodeError as e:
         logging.info(
             f'Looks like the company [ {company_name} ] career page is down. So will try later in 20 mins')
@@ -670,6 +675,37 @@ def for_autodesk(keyword: str, search_api_url: str, response: Dict, search_api_h
         Dict[str, Dict]: relevant jobs for autodesk
     """
     return workday_based_company(response, keyword, "https://autodesk.wd1.myworkdayjobs.com/Ext", search_api_header, search_api_url, session)
+
+
+def for_belkin(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets all the relevant jobs from the belkin career's page
+
+    Args:
+        keyword (str): keyword to match for job
+        search_api_url (str): search api url
+        response (Dict): response for the initial query
+        search_api_header (Dict): search api header
+        session (_type_): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs for belkin
+    """
+    return workday_based_company(response, keyword, "https://belkin.wd5.myworkdayjobs.com/belkin_careers/jobs", search_api_header, search_api_url, session)
+
+
+def for_blackberry(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets all the relevant jobs from blackberry's career's page
+
+    Args:
+        keyword (str): keyword to match for job
+        search_api_url (str): search api url
+        response (Dict): response for the initial query
+        search_api_header (Dict): search api header
+        session (_type_): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs for blackberry
+    """
+    return workday_based_company(response, keyword, "https://bb.wd3.myworkdayjobs.com/BlackBerry", search_api_header, search_api_url, session)
 
 
 def for_astrazeneca(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:

@@ -75,3 +75,5 @@ CompanyID,Type,SearchAPI
 74,POST,https://abcfinancial.wd5.myworkdayjobs.com/wday/cxs/abcfinancial/ABCFinancialServices/jobs
 75,POST,https://activision.wd1.myworkdayjobs.com/wday/cxs/activision/External/jobs
 76,POST,https://autodesk.wd1.myworkdayjobs.com/wday/cxs/autodesk/Ext/jobs
+77,POST,https://belkin.wd5.myworkdayjobs.com/wday/cxs/belkin/belkin_careers/jobs
+78,POST,https://bb.wd3.myworkdayjobs.com/wday/cxs/bb/BlackBerry/jobs
