@@ -185,7 +185,8 @@ def main():
                         known_jobs.append(job_id)
                 company_info[company_id]['KnownJobs'] = '|'.join(known_jobs)
             # rewrite the csv file with the new known job list
-            update_known_jobs(company_info)
+            if company_info:
+                update_known_jobs(company_info)
             logging.info('All new jobs notified to the user.')
             current_date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             send_deployment_notification_to_user(

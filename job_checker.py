@@ -83,6 +83,11 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
             elif company_name == 'Disney':
                 relevant_jobs.update(for_disney(
                     keyword, search_api_url, response, session))
+# Workday Based Banks
+            elif company_name == 'BankOfAmerica':
+                relevant_jobs.update(for_bank_of_america(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+
     except JSONDecodeError as e:
         logging.info(
             f'Looks like the company [ {company_name} ] career page is down. So will try later in 20 mins')
@@ -197,6 +202,7 @@ def for_apple(keyword: str, response: Dict, session) -> Dict[str, Dict]:
         soup = BeautifulSoup(page_response, 'html.parser')
         scripts = soup.find_all('script', {"type": "text/javascript"})
         pages = 0
+        url = ""
         if len(scripts) > 0:
             data = scripts[0].text
             data = data.replace("\n      window.APP_STATE = ", "")
@@ -651,3 +657,19 @@ def for_salesforce(keyword: str, search_api_url: str, response: Dict, search_api
         Dict[str, Dict]: relevant jobs for salesforce
     """
     return workday_based_company(response, keyword, "https://salesforce.wd12.myworkdayjobs.com/en-US/External_Career_Site", search_api_header, search_api_url, session)
+
+
+def for_bank_of_america(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets all the relevant jobs from the bank of america career's page
+
+    Args:
+        keyword (str): keyword to match for job
+        search_api_url (str): search api url
+        response (Dict): response for the initial query
+        search_api_header (Dict): search api header
+        session (_type_): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs for bank of america
+    """
+    return workday_based_company(response, keyword, "https://ghr.wd1.myworkdayjobs.com/en-US/Lateral-US", search_api_header, search_api_url, session)

@@ -71,3 +71,4 @@ CompanyID,Type,SearchAPI
 70,GET,https://api.greenhouse.io/v1/boards/deepmind/embed/jobs
 71,GET,https://www.janestreet.com/jobs/main.json
 72,GET,https://jobs.disneycareers.com/search-jobs/results?ActiveFacetID=6252001&RecordsPerPage=15&Distance=50&RadiusUnitType=0&Keywords=&Location=&ShowRadius=False&IsPagination=False&CustomFacetName=&FacetTerm=&FacetType=0&FacetFilters%5B0%5D.ID=6252001&FacetFilters%5B0%5D.FacetType=2&FacetFilters%5B0%5D.Count=146&FacetFilters%5B0%5D.Display=United+States&FacetFilters%5B0%5D.IsApplied=true&FacetFilters%5B0%5D.FieldName=&SearchResultsModuleName=Search+Results&SearchFiltersModuleName=Search+Filters&SortCriteria=5&SortDirection=1&SearchType=5&RefinedKeywords%5B0%5D={}&PostalCode=&ResultsType=0&fc=&fl=&fcf=&afc=&afl=&afcf=&CurrentPage=1
+73,POST,https://ghr.wd1.myworkdayjobs.com/wday/cxs/ghr/Lateral-US/jobs
