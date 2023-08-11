@@ -74,3 +74,4 @@ CompanyID,Type,SearchAPI
 73,POST,https://ghr.wd1.myworkdayjobs.com/wday/cxs/ghr/Lateral-US/jobs
 74,POST,https://abcfinancial.wd5.myworkdayjobs.com/wday/cxs/abcfinancial/ABCFinancialServices/jobs
 75,POST,https://activision.wd1.myworkdayjobs.com/wday/cxs/activision/External/jobs
+76,POST,https://autodesk.wd1.myworkdayjobs.com/wday/cxs/autodesk/Ext/jobs

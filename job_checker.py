@@ -97,6 +97,9 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
             elif company_name == 'ActivisionBlizzard':
                 relevant_jobs.update(for_activision_blizzard(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'AutoDesk':
+                relevant_jobs.update(for_autodesk(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
 
     except JSONDecodeError as e:
         logging.info(
@@ -651,6 +654,22 @@ def for_activision_blizzard(keyword: str, search_api_url: str, response: Dict, s
         Dict[str, Dict]: relevant jobs for activision blizzard
     """
     return workday_based_company(response, keyword, "https://activision.wd1.myworkdayjobs.com/External", search_api_header, search_api_url, session)
+
+
+def for_autodesk(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets all the relevant jobs from the autodesk career's page
+
+    Args:
+        keyword (str): keyword to match for job
+        search_api_url (str): search api url
+        response (Dict): response for the initial query
+        search_api_header (Dict): search api header
+        session (_type_): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs for autodesk
+    """
+    return workday_based_company(response, keyword, "https://autodesk.wd1.myworkdayjobs.com/Ext", search_api_header, search_api_url, session)
 
 
 def for_astrazeneca(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
