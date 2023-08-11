@@ -72,3 +72,4 @@ CompanyID|SearchHeader
 71|
 72|
 73|{"appliedFacets": {"locations":[]}, "limit": 20, "offset": 0, "searchText": "{}"}
+74|{"appliedFacets": {"locations":["f2181f46d1b60184d94157a78f12573e", "f05d1ab69e590126deeaac56421e2680"]}, "limit": 20, "offset": 0, "searchText": "{}"}

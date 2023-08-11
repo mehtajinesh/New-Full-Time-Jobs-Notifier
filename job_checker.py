@@ -64,12 +64,6 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
             elif company_name == 'Nvidia':
                 relevant_jobs.update(for_nvidia(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
-            elif company_name == 'Salesforce':
-                relevant_jobs.update(for_salesforce(
-                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
-            elif company_name == 'Adobe':
-                relevant_jobs.update(for_adobe(
-                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
             elif company_name == 'AstraZeneca':
                 relevant_jobs.update(for_astrazeneca(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
@@ -86,6 +80,19 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
 # Workday Based Banks
             elif company_name == 'BankOfAmerica':
                 relevant_jobs.update(for_bank_of_america(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+# Workday Based Tech Companies
+            elif company_name == 'Adobe':
+                relevant_jobs.update(for_adobe(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            # elif company_name == 'HPE':
+            #     relevant_jobs.update(for_hpe(
+            #         keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'Salesforce':
+                relevant_jobs.update(for_salesforce(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'ABCFinancialServices':
+                relevant_jobs.update(for_abc_financial_services(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
 
     except JSONDecodeError as e:
@@ -595,6 +602,38 @@ def for_adobe(keyword: str, search_api_url: str, response: Dict, search_api_head
     return workday_based_company(response, keyword, "https://adobe.wd5.myworkdayjobs.com/en-US/external_experienced", search_api_header, search_api_url, session)
 
 
+def for_salesforce(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets all the relevant jobs from the salesforce career's page
+
+    Args:
+        keyword (str): keyword to match for job
+        search_api_url (str): search api url
+        response (Dict): response for the initial query
+        search_api_header (Dict): search api header
+        session (_type_): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs for salesforce
+    """
+    return workday_based_company(response, keyword, "https://salesforce.wd12.myworkdayjobs.com/en-US/External_Career_Site", search_api_header, search_api_url, session)
+
+
+def for_abc_financial_services(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets all the relevant jobs from the abc finanacial career's page
+
+    Args:
+        keyword (str): keyword to match for job
+        search_api_url (str): search api url
+        response (Dict): response for the initial query
+        search_api_header (Dict): search api header
+        session (_type_): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs for finanacial
+    """
+    return workday_based_company(response, keyword, "https://abcfinancial.wd5.myworkdayjobs.com/en-US/ABCFinancialServices", search_api_header, search_api_url, session)
+
+
 def for_astrazeneca(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
     """gets all the relevant jobs from the astrazeneca career's page
 
@@ -641,22 +680,6 @@ def for_qualcomm(keyword: str, search_api_url: str, response: Dict, search_api_h
         Dict[str, Dict]: relevant jobs for qualcomm
     """
     return workday_based_company(response, keyword, "https://qualcomm.wd5.myworkdayjobs.com/en-US/External", search_api_header, search_api_url, session)
-
-
-def for_salesforce(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
-    """gets all the relevant jobs from the salesforce career's page
-
-    Args:
-        keyword (str): keyword to match for job
-        search_api_url (str): search api url
-        response (Dict): response for the initial query
-        search_api_header (Dict): search api header
-        session (_type_): request session object
-
-    Returns:
-        Dict[str, Dict]: relevant jobs for salesforce
-    """
-    return workday_based_company(response, keyword, "https://salesforce.wd12.myworkdayjobs.com/en-US/External_Career_Site", search_api_header, search_api_url, session)
 
 
 def for_bank_of_america(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
