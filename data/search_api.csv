@@ -15,7 +15,7 @@ CompanyID,Type,SearchAPI
 14,GET,
 15,GET,
 16,POST,https://adobe.wd5.myworkdayjobs.com/wday/cxs/adobe/external_experienced/jobs
-17,GET,
+17,GET,https://jobs.intuit.com/search-jobs/{}/United%20States/27595/1/2/6252001/39x76/-98x5/50/2
 18,GET,
 19,GET,
 20,GET,

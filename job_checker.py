@@ -1,5 +1,6 @@
 import copy
 import math
+import os
 from typing import Dict, List
 import urllib
 import logging
@@ -10,7 +11,23 @@ import json
 from json import JSONDecodeError
 
 from utils import get_past_date
-from constants import FUZZY_RATIO_MATCH, DAYS_TO_CHECK, TERMS_TO_IGNORE
+from constants import FUZZY_RATIO_MATCH, DAYS_TO_CHECK, SLACK_ERROR_NOTIFICATION_WEBHOOK_VAR, TERMS_TO_IGNORE
+
+
+def send_error_notification_to_user(notification_message: str, session):
+    """sends the error notification to user
+
+    Args:
+        notification_message (str): notification message
+        session (_type_): session for the requested url
+    """
+    req = session.post(url=os.getenv(SLACK_ERROR_NOTIFICATION_WEBHOOK_VAR),
+                       headers={
+                       'Content-type': 'application/json'},
+                       json={'text': f'Error Message: ERROR - {notification_message}'})
+    logging.info(
+        'Error notification sent to deployment with response status code: '
+        + str(req.status_code))
 
 
 def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: str, keywords: List[str], search_api_header: Dict, session) -> Dict:
@@ -77,6 +94,8 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
             elif company_name == 'Disney':
                 relevant_jobs.update(for_disney(
                     keyword, search_api_url, response, session))
+            elif company_name == 'Intuit':
+                relevant_jobs.update(for_intuit(keyword, response, session))
 # Workday Based Banks
             elif company_name == 'BankOfAmerica':
                 relevant_jobs.update(for_bank_of_america(
@@ -109,6 +128,8 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
     except JSONDecodeError as e:
         logging.info(
             f'Looks like the company [ {company_name} ] career page is down. So will try later in 20 mins')
+        send_error_notification_to_user(
+            f'Looks like the company [ {company_name} ] career page is down. So will try later in 20 mins', session)
     return relevant_jobs
 
 
@@ -278,7 +299,7 @@ def for_amazon(keyword: str, response: Dict) -> Dict[str, Dict]:
                 date_difference = today - posted_date
                 if date_difference.days < DAYS_TO_CHECK:
                     relevant_jobs[job_id] = {
-                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://www.amazon.jobs/{job['job_path']}"}
+                        'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://www.amazon.jobs{job['job_path']}"}
     return relevant_jobs
 
 
@@ -770,3 +791,40 @@ def for_bank_of_america(keyword: str, search_api_url: str, response: Dict, searc
         Dict[str, Dict]: relevant jobs for bank of america
     """
     return workday_based_company(response, keyword, "https://ghr.wd1.myworkdayjobs.com/en-US/Lateral-US", search_api_header, search_api_url, session)
+
+
+def for_intuit(keyword: str, response: Dict, session) -> Dict[str, Dict]:
+    """gets the job positions from intuit's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): page response
+        session (request): request session object
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    relevant_jobs = {}
+    soup = BeautifulSoup(response.strip(), 'html.parser')
+    scripts = soup.find_all("div", {"id": "search-results-list"})
+    if len(scripts) > 0:
+        data = scripts[0]
+        # get second item from contents list
+        ul_data = data.contents[1]
+        for item in ul_data.contents:
+            if item.text == '\n':
+                continue
+            job_data = item.contents[1]
+            job_id = job_data['data-job-id']
+            curr_job_title = job_data['data-title']
+            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                ignore_position = False
+                for term in TERMS_TO_IGNORE:
+                    if term in curr_job_title:
+                        ignore_position = True
+                        break
+                if not ignore_position:
+                    relevant_jobs[job_id] = {
+                        'title': curr_job_title, 'posted_date': date.today(),
+                        'apply': f"https://jobs.intuit.com{job_data['href']}"}
+    return relevant_jobs
