@@ -7,7 +7,7 @@ CompanyID,Type,SearchAPI
 6,GET,
 7,GET,https://jobs.apple.com/en-us/search?search={}&sort=newest&location=united-states-USA&team=machine-learning-infrastructure-MLAI-MLI+deep-learning-and-reinforcement-learning-MLAI-DLRL+natural-language-processing-and-speech-technologies-MLAI-NLP+computer-vision-MLAI-CV+applied-research-MLAI-AR+machine-learning-and-ai-SFTWR-MCHLN
 8,GET,https://gcsservices.careers.microsoft.com/search/api/v1/search?q={}&lc=United%20States&l=en_us&o=Relevance
-9,GET,
+9,GET,https://boards.greenhouse.io/samsungresearchamerica/
 10,GET,https://careers.tencent.com/tencentcareer/api/post/Query?timestamp=1688787924998&countryId=2&cityId=&bgIds=&productId=&categoryId=&parentCategoryId=&attrId=&keyword={}&pageIndex=1&pageSize=100&language=en-us&area=us
 11,POST,https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCareerSite/jobs
 12,GET,"https://eeho.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions?onlyData=true&expand=requisitionList.secondaryLocations,flexFieldsFacet.values&finder=findReqs;siteNumber=CX_45001,facetsList=LOCATIONS%3BWORK_LOCATIONS%3BWORKPLACE_TYPES%3BTITLES%3BCATEGORIES%3BORGANIZATIONS%3BPOSTING_DATES%3BFLEX_FIELDS,limit=14,keyword={},lastSelectedFacet=POSTING_DATES,locationId=300000000149325,selectedFlexFieldsFacets=%22AttributeChar6%7C3%20to%205%2B%20years%3B0%20to%202%2B%20years%7C%7CAttributeChar12%7CLess%20than%2010%20applicants%22,selectedLocationsFacet=300000000149325,selectedPostingDatesFacet=7,sortBy=POSTING_DATES_DESC"
@@ -38,7 +38,7 @@ CompanyID,Type,SearchAPI
 37,GET,
 38,GET,
 39,GET,
-40,GET,
+40,GET,https://boards.greenhouse.io/robinhood
 41,GET,
 42,GET,
 43,GET,
@@ -77,3 +77,5 @@ CompanyID,Type,SearchAPI
 76,POST,https://autodesk.wd1.myworkdayjobs.com/wday/cxs/autodesk/Ext/jobs
 77,POST,https://belkin.wd5.myworkdayjobs.com/wday/cxs/belkin/belkin_careers/jobs
 78,POST,https://bb.wd3.myworkdayjobs.com/wday/cxs/bb/BlackBerry/jobs
+79,GET,https://boards.greenhouse.io/apolloio
+80,POST,https://capitalone.wd1.myworkdayjobs.com/wday/cxs/capitalone/Capital_One/jobs

@@ -100,6 +100,9 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
             elif company_name == 'BankOfAmerica':
                 relevant_jobs.update(for_bank_of_america(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'CapitalOne':
+                relevant_jobs.update(for_capital_one(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
 # Workday Based Tech Companies
             elif company_name == 'Adobe':
                 relevant_jobs.update(for_adobe(
@@ -125,6 +128,13 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
             elif company_name == 'BlackBerry':
                 relevant_jobs.update(for_blackberry(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+# Greenhouse Based Companies
+            elif company_name == 'Apollo.io':
+                relevant_jobs.update(greenhouse_based_company(
+                    response, keyword, session))
+            elif company_name == 'Samsung Research America':
+                relevant_jobs.update(greenhouse_based_company(
+                    response, keyword, session))
     except JSONDecodeError as e:
         logging.info(
             f'Looks like the company [ {company_name} ] career page is down. So will try later in 20 mins')
@@ -572,6 +582,44 @@ def for_janestreet(keyword: str, response: Dict) -> Dict[str, Dict]:
                         'title': curr_job_title, 'posted_date': today, 'apply': f"https://www.janestreet.com/join-jane-street/position/{job_id}"}
     return relevant_jobs
 
+
+def for_intuit(keyword: str, response: Dict, session) -> Dict[str, Dict]:
+    """gets the job positions from intuit's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): page response
+        session (request): request session object
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    relevant_jobs = {}
+    soup = BeautifulSoup(response.strip(), 'html.parser')
+    scripts = soup.find_all("div", {"id": "search-results-list"})
+    if len(scripts) > 0:
+        data = scripts[0]
+        # get second item from contents list
+        ul_data = data.contents[1]
+        for item in ul_data.contents:
+            if item.text == '\n':
+                continue
+            job_data = item.contents[1]
+            job_id = job_data['data-job-id']
+            curr_job_title = job_data['data-title']
+            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                ignore_position = False
+                for term in TERMS_TO_IGNORE:
+                    if term in curr_job_title:
+                        ignore_position = True
+                        break
+                if not ignore_position:
+                    relevant_jobs[job_id] = {
+                        'title': curr_job_title, 'posted_date': date.today(),
+                        'apply': f"https://jobs.intuit.com{job_data['href']}"}
+    return relevant_jobs
+
+
 # Workday based Companies
 
 
@@ -793,38 +841,70 @@ def for_bank_of_america(keyword: str, search_api_url: str, response: Dict, searc
     return workday_based_company(response, keyword, "https://ghr.wd1.myworkdayjobs.com/en-US/Lateral-US", search_api_header, search_api_url, session)
 
 
-def for_intuit(keyword: str, response: Dict, session) -> Dict[str, Dict]:
-    """gets the job positions from intuit's career page
+def for_capital_one(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions from capital one's career page
 
     Args:
-        keyword (str): keyword to match with job title
-        response (Dict): page response
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header
         session (request): request session object
 
     Returns:
-        [str, Dict]: relevant jobs
+        Dict[str, Dict]: relevant jobs
     """
+    return workday_based_company(response, keyword, "https://capitalone.wd1.myworkdayjobs.com/Capital_One", search_api_header, search_api_url, session)
+
+# Greenhouse based Companies
+
+
+def greenhouse_based_company(company_page_respone, company_job_keyword, session):
     relevant_jobs = {}
-    soup = BeautifulSoup(response.strip(), 'html.parser')
-    scripts = soup.find_all("div", {"id": "search-results-list"})
-    if len(scripts) > 0:
-        data = scripts[0]
-        # get second item from contents list
-        ul_data = data.contents[1]
-        for item in ul_data.contents:
-            if item.text == '\n':
-                continue
-            job_data = item.contents[1]
-            job_id = job_data['data-job-id']
-            curr_job_title = job_data['data-title']
-            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-                ignore_position = False
-                for term in TERMS_TO_IGNORE:
-                    if term in curr_job_title:
-                        ignore_position = True
-                        break
-                if not ignore_position:
-                    relevant_jobs[job_id] = {
-                        'title': curr_job_title, 'posted_date': date.today(),
-                        'apply': f"https://jobs.intuit.com{job_data['href']}"}
+    soup = BeautifulSoup(company_page_respone.strip(), 'html.parser')
+    available_jobs = soup.find_all("section", {"class": "level-0"})
+    if len(available_jobs) > 0:
+        for department_jobs in available_jobs:
+            for job in department_jobs.contents:
+                # check if department_jobs is div or not
+                if job.name not in ['div', 'section']:
+                    continue
+                elif job.name == 'div':
+                    job_title = job.text.strip()
+                    job_semi_url = job.contents[1]["href"]
+                elif job.name == 'section':
+                    for sub_job in job.contents:
+                        if sub_job.name == 'div':
+                            job_title = sub_job.text.strip()
+                            job_semi_url = sub_job.contents[1]["href"]
+                            break
+                job_id = job_semi_url.split("/")[-1]
+                job_url = f'https://boards.greenhouse.io{job_semi_url}'
+                if fuzz.ratio(job_title, company_job_keyword) > FUZZY_RATIO_MATCH:
+                    ignore_position = False
+                    for term in TERMS_TO_IGNORE:
+                        if term in job_title:
+                            ignore_position = True
+                            break
+                    if not ignore_position:
+                        job_data_response = get_response_for_search_url(
+                            "GET", job_url, session)
+                        job_data_soup = BeautifulSoup(
+                            job_data_response.strip(), 'html.parser')
+                        job_data = job_data_soup.find_all(
+                            "script", {"type": "application/ld+json"})
+                        if len(job_data) > 0:
+                            job_data = json.loads(job_data[0].text.strip())
+                            job_location = job_data['jobLocation']['address']['addressLocality']
+                            if job_location:
+                                if ('United States' not in job_location) and ('US' not in job_location):
+                                    continue
+                            today = date.today()
+                            posted_date = datetime.strptime(
+                                job_data['datePosted'], "%Y-%m-%d").date()
+                            date_difference = today - posted_date
+                            if date_difference.days < DAYS_TO_CHECK:
+                                relevant_jobs[job_id] = {
+                                    'title': job_title, 'posted_date': posted_date,
+                                    'apply': job_url}
     return relevant_jobs
