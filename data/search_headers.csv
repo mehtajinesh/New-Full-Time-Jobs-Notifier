@@ -79,3 +79,4 @@ CompanyID|SearchHeader
 78|{"appliedFacets": {"Country": ["bc33aa3152ec42d4995f4791a106ed09"]}, "limit": 20, "offset": 0, "searchText": "{}"}
 79|
 80|{"appliedFacets": {}, "limit": 20, "offset": 0, "searchText": "{}"}
+81|{ "appliedFacets": { "locationHierarchy1": [ "6cee717ed86e0100c34b9ba355480001" ], "jobFamilyGroup": [ "b5c3287c76c20100b318a19542940001", "b5c3287c76c20100b3189b6fdb430000", "b5c3287c76c20100b3189c0c129a0001" ] }, "limit": 20, "offset": 0, "searchText": "{}" }

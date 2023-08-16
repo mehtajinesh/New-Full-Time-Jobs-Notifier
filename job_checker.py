@@ -103,6 +103,9 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
             elif company_name == 'CapitalOne':
                 relevant_jobs.update(for_capital_one(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'WellsFargo':
+                relevant_jobs.update(for_wells_fargo(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
 # Workday Based Tech Companies
             elif company_name == 'Adobe':
                 relevant_jobs.update(for_adobe(
@@ -855,6 +858,23 @@ def for_capital_one(keyword: str, search_api_url: str, response: Dict, search_ap
         Dict[str, Dict]: relevant jobs
     """
     return workday_based_company(response, keyword, "https://capitalone.wd1.myworkdayjobs.com/Capital_One", search_api_header, search_api_url, session)
+
+
+def for_wells_fargo(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions from wells fargo's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header
+        session (request): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://wd1.myworkdaysite.com/en-US/recruiting/wf/WellsFargoJobs", search_api_header, search_api_url, session)
+
 
 # Greenhouse based Companies
 

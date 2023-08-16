@@ -79,3 +79,4 @@ CompanyID,Type,SearchAPI
 78,POST,https://bb.wd3.myworkdayjobs.com/wday/cxs/bb/BlackBerry/jobs
 79,GET,https://boards.greenhouse.io/apolloio
 80,POST,https://capitalone.wd1.myworkdayjobs.com/wday/cxs/capitalone/Capital_One/jobs
+81,POST,https://wd1.myworkdaysite.com/wday/cxs/wf/WellsFargoJobs/jobs
