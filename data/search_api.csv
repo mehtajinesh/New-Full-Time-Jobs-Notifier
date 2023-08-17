@@ -81,3 +81,4 @@ CompanyID,Type,SearchAPI
 80,POST,https://capitalone.wd1.myworkdayjobs.com/wday/cxs/capitalone/Capital_One/jobs
 81,POST,https://wd1.myworkdaysite.com/wday/cxs/wf/WellsFargoJobs/jobs
 82,POST,https://citi.wd5.myworkdayjobs.com/wday/cxs/citi/2/jobs
+83,POST,https://api-higher.gs.com/gateway/api/v1/graphql

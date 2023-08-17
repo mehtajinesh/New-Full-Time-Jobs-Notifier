@@ -99,6 +99,9 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
             elif company_name == 'JPMorgon':
                 relevant_jobs.update(for_jpmorgon(
                     keyword, response))
+            elif company_name == 'GoldmanSachs':
+                relevant_jobs.update(for_goldman_sachs(
+                    keyword, response))
 # Workday Based Banks
             elif company_name == 'BankOfAmerica':
                 relevant_jobs.update(for_bank_of_america(
@@ -659,6 +662,38 @@ def for_jpmorgon(keyword: str, response: Dict) -> Dict[str, Dict]:
                     if date_difference.days < DAYS_TO_CHECK:
                         relevant_jobs[job_id] = {
                             'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/{job_id}"}
+    return relevant_jobs
+
+
+def for_goldman_sachs(keyword: str, response: Dict) -> Dict[str, Dict]:
+    """gets the job information from goldman sachs's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): initial response from the search api url
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    relevant_jobs = {}
+    available_jobs = response["data"]["roleSearch"]["items"]
+    for job in available_jobs:
+        if 'jobTitle' in job:
+            job_id = job['externalSource']['sourceId']
+            curr_job_title = job['jobTitle']
+            posted_date = date.today()
+            today = date.today()
+            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                ignore_position = False
+                for term in TERMS_TO_IGNORE:
+                    if term in curr_job_title:
+                        ignore_position = True
+                        break
+                if not ignore_position:
+                    date_difference = today - posted_date
+                    if date_difference.days < DAYS_TO_CHECK:
+                        relevant_jobs[job_id] = {
+                            'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://higher.gs.com/roles?title={urllib.parse.quote(curr_job_title)}&id={job_id}"}
     return relevant_jobs
 
 # Workday based Companies
