@@ -96,6 +96,9 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
                     keyword, search_api_url, response, session))
             elif company_name == 'Intuit':
                 relevant_jobs.update(for_intuit(keyword, response, session))
+            elif company_name == 'JPMorgon':
+                relevant_jobs.update(for_jpmorgon(
+                    keyword, response))
 # Workday Based Banks
             elif company_name == 'BankOfAmerica':
                 relevant_jobs.update(for_bank_of_america(
@@ -105,6 +108,9 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
             elif company_name == 'WellsFargo':
                 relevant_jobs.update(for_wells_fargo(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'Citi':
+                relevant_jobs.update(for_citi(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
 # Workday Based Tech Companies
             elif company_name == 'Adobe':
@@ -623,6 +629,38 @@ def for_intuit(keyword: str, response: Dict, session) -> Dict[str, Dict]:
     return relevant_jobs
 
 
+def for_jpmorgon(keyword: str, response: Dict) -> Dict[str, Dict]:
+    """gets the job information from jpmorgon's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): initial response from the search api url
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    relevant_jobs = {}
+    available_jobs = response["items"][0]["requisitionList"]
+    for job in available_jobs:
+        if 'Title' in job:
+            job_id = job['Id']
+            curr_job_title = job['Title']
+            posted_date = datetime.strptime(
+                job['PostedDate'], "%Y-%m-%dT%H:%M:%S%z").date()
+            today = date.today()
+            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                ignore_position = False
+                for term in TERMS_TO_IGNORE:
+                    if term in curr_job_title:
+                        ignore_position = True
+                        break
+                if not ignore_position:
+                    date_difference = today - posted_date
+                    if date_difference.days < DAYS_TO_CHECK:
+                        relevant_jobs[job_id] = {
+                            'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/{job_id}"}
+    return relevant_jobs
+
 # Workday based Companies
 
 
@@ -875,6 +913,21 @@ def for_wells_fargo(keyword: str, search_api_url: str, response: Dict, search_ap
     """
     return workday_based_company(response, keyword, "https://wd1.myworkdaysite.com/en-US/recruiting/wf/WellsFargoJobs", search_api_header, search_api_url, session)
 
+
+def for_citi(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions from citi's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header
+        session (request): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://citi.wd5.myworkdayjobs.com/2", search_api_header, search_api_url, session)
 
 # Greenhouse based Companies
 

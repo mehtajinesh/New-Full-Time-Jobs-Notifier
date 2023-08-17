@@ -66,7 +66,7 @@ CompanyID,Type,SearchAPI
 65,GET,
 66,GET,
 67,GET,
-68,GET,
+68,GET,"https://jpmc.fa.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions?onlyData=true&expand=requisitionList.secondaryLocations,flexFieldsFacet.values&finder=findReqs;siteNumber=CX_1001,facetsList=LOCATIONS%3BWORK_LOCATIONS%3BWORKPLACE_TYPES%3BTITLES%3BCATEGORIES%3BORGANIZATIONS%3BPOSTING_DATES%3BFLEX_FIELDS,limit=200,keyword=%22software%22,locationId=300000000289738,sortBy=POSTING_DATES_DESC"
 69,POST,https://astrazeneca.wd3.myworkdayjobs.com/wday/cxs/astrazeneca/Careers/jobs
 70,GET,https://api.greenhouse.io/v1/boards/deepmind/embed/jobs
 71,GET,https://www.janestreet.com/jobs/main.json
@@ -80,3 +80,4 @@ CompanyID,Type,SearchAPI
 79,GET,https://boards.greenhouse.io/apolloio
 80,POST,https://capitalone.wd1.myworkdayjobs.com/wday/cxs/capitalone/Capital_One/jobs
 81,POST,https://wd1.myworkdaysite.com/wday/cxs/wf/WellsFargoJobs/jobs
+82,POST,https://citi.wd5.myworkdayjobs.com/wday/cxs/citi/2/jobs
