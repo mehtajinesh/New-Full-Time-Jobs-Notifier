@@ -118,6 +118,9 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
             elif company_name == 'Santander':
                 relevant_jobs.update(for_santander(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'StateStreet':
+                relevant_jobs.update(for_state_street(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
 # Workday Based Tech Companies
             elif company_name == 'Adobe':
                 relevant_jobs.update(for_adobe(
@@ -983,6 +986,21 @@ def for_santander(keyword: str, search_api_url: str, response: Dict, search_api_
     """
     return workday_based_company(response, keyword, "https://santander.wd3.myworkdayjobs.com/en-US/SantanderCareers", search_api_header, search_api_url, session)
 
+
+def for_state_street(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions from state street corporation's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header
+        session (request): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://statestreet.wd1.myworkdayjobs.com/en-US/Global", search_api_header, search_api_url, session)
 
 # Greenhouse based Companies
 

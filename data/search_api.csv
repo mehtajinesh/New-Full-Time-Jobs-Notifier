@@ -83,3 +83,5 @@ CompanyID,Type,SearchAPI
 82,POST,https://citi.wd5.myworkdayjobs.com/wday/cxs/citi/2/jobs
 83,POST,https://api-higher.gs.com/gateway/api/v1/graphql
 84,POST,https://santander.wd3.myworkdayjobs.com/wday/cxs/santander/SantanderCareers/jobs
+85,POST,https://api-higher.gs.com/gateway/api/v1/graphql
+86,POST,https://statestreet.wd1.myworkdayjobs.com/wday/cxs/statestreet/Global/jobs
