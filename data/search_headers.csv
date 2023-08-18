@@ -65,7 +65,7 @@ CompanyID|SearchHeader
 64|
 65|
 66|
-67|
+67|{ "appliedFacets": { "locations": [ "dd81500376e3100d308a693ac9334f50", "dd81500376e3100d308a8c0d13cb4f9b", "dd81500376e3100d308a6b7c6c334f55", "dd81500376e3100d308a6dcac9034f5a", "975f5db456f5010cc27e05797d6f0000", "dd81500376e3100d308a725565eb4f64", "febd73641484109bf1faaa7e997a66c3", "dd81500376e3100d308a95535c334faf", "dd81500376e3100d308a99d97cab4fb9", "dd81500376e3100d308aac627f534fe1", "dd81500376e3100d308aa55cc4934fd2", "dd81500376e3100d308aa0a8d1a34fc8", "dd81500376e3100d308a9c1de2b34fbe", "dd81500376e3100d308aa2fa011b4fcd", "59de7feb9e0e01f2129d6909e82a0eb0", "96bf16fa269701eb4279010ddf93b1e3", "ae914e0d596801c955d0a23a7a0bb72b" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
 68|
 69|{"appliedFacets":{"locations":["567b3426fd960124eeba0dbd8d37a05f","b914f96b1779102cc9746a867dbfb2c5","b914f96b1779102cc97453963e19b2a7","1503eab488d5011f7c237683c12ee54a","4497ee3db3de1043e772c47dc515206d","567b3426fd9601916f61f4bc8d378c5f","567b3426fd96015bf9a607bd8d379b5f","b914f96b1779102cc97479ca48a4b2d9","567b3426fd9601e2dd763dc18d37d962","ff2133cb5404108b79cae05325d679bb","567b3426fd960166631f3fc38d376464","567b3426fd9601d7293f46c38d376964","b914f96b1779102cc974801c22c6b2e3"],"jobFamilyGroup":["393c2066a4c001e1024ae40eae000c27","b914f96b1779102cc4a9bfc4484d935a","b914f96b1779102cc4a9d3cd99dd9364"]},"limit":20,"offset":0,"searchText":"{}"}
 70|
@@ -85,3 +85,6 @@ CompanyID|SearchHeader
 84|{ "appliedFacets": { "locationCountry": [ "bc33aa3152ec42d4995f4791a106ed09" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
 85|
 86|{ "appliedFacets": { "Location_Country": [ "bc33aa3152ec42d4995f4791a106ed09" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
+87|
+88|
+89|{ "appliedFacets": { "Country": [ "bc33aa3152ec42d4995f4791a106ed09" ] }, "limit": 20, "offset": 0, "searchText": "{}" }

@@ -96,12 +96,23 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
                     keyword, search_api_url, response, session))
             elif company_name == 'Intuit':
                 relevant_jobs.update(for_intuit(keyword, response, session))
-            elif company_name == 'JPMorgon':
-                relevant_jobs.update(for_jpmorgon(
-                    keyword, response))
             elif company_name == 'GoldmanSachs':
                 relevant_jobs.update(for_goldman_sachs(
                     keyword, response))
+# Oracle Cloud Based Companies
+            elif company_name == 'JPMorgon':
+                relevant_jobs.update(for_jpmorgon(
+                    keyword, response))
+            elif company_name == 'Citizens':
+                relevant_jobs.update(for_citizens(
+                    keyword, response))
+# Eightfold Based Companies
+            elif company_name == 'MorganStanley':
+                relevant_jobs.update(for_morgan_stanley(
+                    keyword, response, search_api_url, session))
+            elif company_name == 'AmericanExpress':
+                relevant_jobs.update(for_american_express(
+                    keyword, response, search_api_url, session))
 # Workday Based Banks
             elif company_name == 'BankOfAmerica':
                 relevant_jobs.update(for_bank_of_america(
@@ -120,6 +131,12 @@ def get_relevant_jobs(company_name: str, search_api_type: str, search_api_url: s
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
             elif company_name == 'StateStreet':
                 relevant_jobs.update(for_state_street(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'Discover':
+                relevant_jobs.update(for_discover(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'DeutscheBank':
+                relevant_jobs.update(for_deutsche_bank(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
 # Workday Based Tech Companies
             elif company_name == 'Adobe':
@@ -638,39 +655,6 @@ def for_intuit(keyword: str, response: Dict, session) -> Dict[str, Dict]:
     return relevant_jobs
 
 
-def for_jpmorgon(keyword: str, response: Dict) -> Dict[str, Dict]:
-    """gets the job information from jpmorgon's career page
-
-    Args:
-        keyword (str): keyword to match with job title
-        response (Dict): initial response from the search api url
-
-    Returns:
-        [str, Dict]: relevant jobs
-    """
-    relevant_jobs = {}
-    available_jobs = response["items"][0]["requisitionList"]
-    for job in available_jobs:
-        if 'Title' in job:
-            job_id = job['Id']
-            curr_job_title = job['Title']
-            posted_date = datetime.strptime(
-                job['PostedDate'], "%Y-%m-%dT%H:%M:%S%z").date()
-            today = date.today()
-            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
-                ignore_position = False
-                for term in TERMS_TO_IGNORE:
-                    if term in curr_job_title:
-                        ignore_position = True
-                        break
-                if not ignore_position:
-                    date_difference = today - posted_date
-                    if date_difference.days < DAYS_TO_CHECK:
-                        relevant_jobs[job_id] = {
-                            'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/{job_id}"}
-    return relevant_jobs
-
-
 def for_goldman_sachs(keyword: str, response: Dict) -> Dict[str, Dict]:
     """gets the job information from goldman sachs's career page
 
@@ -702,10 +686,141 @@ def for_goldman_sachs(keyword: str, response: Dict) -> Dict[str, Dict]:
                             'title': curr_job_title, 'posted_date': posted_date, 'apply': f"https://higher.gs.com/roles?title={urllib.parse.quote(curr_job_title)}&id={job_id}"}
     return relevant_jobs
 
+# Oracle Cloud Based Companies
+
+
+def for_oracle_cloud_based_company(page_respone, job_keyword, apply_prefix):
+    relevant_jobs = {}
+    if (len(page_respone["items"]) > 0):
+        available_jobs = page_respone["items"][0]["requisitionList"]
+        for job in available_jobs:
+            if 'Title' in job:
+                job_id = str(job['Id'])
+                curr_job_title = job['Title']
+                posted_date = datetime.strptime(
+                    job['PostedDate'], "%Y-%m-%dT%H:%M:%S%z").date()
+                today = date.today()
+                if fuzz.ratio(curr_job_title, job_keyword) > FUZZY_RATIO_MATCH:
+                    ignore_position = False
+                    for term in TERMS_TO_IGNORE:
+                        if term in curr_job_title:
+                            ignore_position = True
+                            break
+                    if not ignore_position:
+                        date_difference = today - posted_date
+                        if date_difference.days < DAYS_TO_CHECK:
+                            relevant_jobs[job_id] = {
+                                'title': curr_job_title, 'posted_date': posted_date, 'apply': f"{apply_prefix}{job_id}"}
+    return relevant_jobs
+
+
+def for_jpmorgon(keyword: str, response: Dict) -> Dict[str, Dict]:
+    """gets the job information from jpmorgon's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): initial response from the search api url
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    return for_oracle_cloud_based_company(response, keyword, "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/")
+
+
+def for_citizens(keyword: str, response: Dict) -> Dict[str, Dict]:
+    """gets the job information from citizens's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): initial response from the search api url
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    return for_oracle_cloud_based_company(response, keyword, "https://hcgn.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job")
+
+# Eightfold Based Companies
+
+
+def for_eightfold_based_company(company_page_respone, company_job_keyword, search_api_url, session):
+    def get_relevant_jobs_from_json_response(page_response, keyword):
+        page_relevant_jobs = {}
+        total_jobs = page_response["count"]
+        no_of_pages = math.ceil(total_jobs / 10)
+        page_available_jobs = page_response["positions"]
+        for job in page_available_jobs:
+            if 'name' in job:
+                job_id = str(job['id'])
+                curr_job_title = job['name']
+                # convert from timestamp to date
+                posted_date = datetime.fromtimestamp(job['t_update']).date()
+                today = date.today()
+                if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                    ignore_position = False
+                    for term in TERMS_TO_IGNORE:
+                        if term in curr_job_title:
+                            ignore_position = True
+                            break
+                    if not ignore_position:
+                        date_difference = today - posted_date
+                        if date_difference.days < DAYS_TO_CHECK:
+                            page_relevant_jobs[job_id] = {
+                                'title': curr_job_title, 'posted_date': posted_date, 'apply': job['canonicalPositionUrl']}
+        return page_relevant_jobs, no_of_pages
+    if "count" in company_page_respone:
+        relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
+            company_page_respone, company_job_keyword)
+        if no_of_pages > 1:
+            curr_page_count = 1
+            while (curr_page_count < min(no_of_pages+1, 5)):
+                new_search_api_url = search_api_url + \
+                    f"&start={curr_page_count*10}&num=10"
+                new_response = get_response_for_search_url(
+                    "GET", new_search_api_url, session)
+                if not new_response:
+                    return relevant_jobs
+                new_relevant_jobs, new_pages = get_relevant_jobs_from_json_response(
+                    new_response, company_job_keyword)
+                relevant_jobs.update(new_relevant_jobs)
+                curr_page_count += 1
+    return relevant_jobs
+
+
+def for_morgan_stanley(keyword: str, response: Dict, search_api_url, session) -> Dict[str, Dict]:
+    """gets the job information from morgan stanley's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): initial response from the search api url
+        search_api_url (str): search api url
+        session (_type_): request session object
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    return for_eightfold_based_company(response, keyword, search_api_url, session)
+
+
+def for_american_express(keyword: str, response: Dict, search_api_url, session) -> Dict[str, Dict]:
+    """gets the job information from american express's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): initial response from the search api url
+        search_api_url (str): search api url
+        session (_type_): request session object
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    return for_eightfold_based_company(response, keyword, search_api_url, session)
+
 # Workday based Companies
 
 
 def workday_based_company(company_page_respone, company_job_keyword, company_apply_link_prefix, search_api_header, search_api_url, session):
+    relevant_jobs = {}
+
     def get_relevant_jobs_from_json_response(page_response, keyword, apply_link_prefix):
         page_relevant_jobs = {}
         total_jobs = page_response["total"]
@@ -1002,6 +1117,37 @@ def for_state_street(keyword: str, search_api_url: str, response: Dict, search_a
     """
     return workday_based_company(response, keyword, "https://statestreet.wd1.myworkdayjobs.com/en-US/Global", search_api_header, search_api_url, session)
 
+
+def for_discover(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions from discover's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header
+        session (request): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://discover.wd5.myworkdayjobs.com/en-US/Discover", search_api_header, search_api_url, session)
+
+
+def for_deutsche_bank(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions from deutsche bank's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header
+        session (request): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://db.wd3.myworkdayjobs.com/en-US/DBWebsite", search_api_header, search_api_url, session)
 # Greenhouse based Companies
 
 

@@ -33,5 +33,7 @@ TERMS_TO_IGNORE = [
     "AV",
     "LMTS",
     "AMTS",
-    "PMTS"
+    "PMTS",
+    "Internship",
+    "Infrastructure"
 ]
