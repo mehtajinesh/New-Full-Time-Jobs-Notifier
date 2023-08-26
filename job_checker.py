@@ -226,6 +226,10 @@ def get_relevant_jobs(company_name: str, company_portal, search_api_type: str, s
             elif company_name == 'OpenAI':
                 relevant_jobs.update(greenhouse_based_company(
                     response, keyword, session))
+    # Lever Based Companies
+            elif company_name == 'Plaid':
+                relevant_jobs.update(lever_based_company(
+                    response, keyword, session))
     except JSONDecodeError as e:
         logging.info(
             f'Looks like the company [ {company_name} ] career page is down. So will try later in 20 mins')
@@ -1839,4 +1843,46 @@ def greenhouse_based_company(company_page_respone, company_job_keyword, session)
                                 relevant_jobs[job_id] = {
                                     'title': job_title, 'posted_date': posted_date,
                                     'apply': job_url}
+    return relevant_jobs
+
+
+# Lever Based Companies
+
+def lever_based_company(company_page_respone, company_job_keyword, session):
+    relevant_jobs = {}
+    soup = BeautifulSoup(company_page_respone.strip(), 'html.parser')
+    available_jobs = soup.find_all("div", {"class": "posting"})
+    if len(available_jobs) > 0:
+        for job in available_jobs:
+            # check if department_jobs is div or not
+            job_url = job.contents[1]["href"]
+            job_id = job_url.split("/")[-1]
+            job_title = job.contents[1].text.split('-')[0].strip()
+            if fuzz.ratio(job_title, company_job_keyword) > FUZZY_RATIO_MATCH:
+                ignore_position = False
+                for term in TERMS_TO_IGNORE:
+                    if term in job_title:
+                        ignore_position = True
+                        break
+                if not ignore_position:
+                    job_data_response = get_response_for_search_url(
+                        "GET", job_url, session)
+                    job_data_soup = BeautifulSoup(
+                        job_data_response.strip(), 'html.parser')
+                    job_data = job_data_soup.find_all(
+                        "script", {"type": "application/ld+json"})
+                    if len(job_data) > 0:
+                        job_data = json.loads(job_data[0].text.strip())
+                        job_location = job_data['jobLocation']['address']['addressLocality']
+                        if job_location:
+                            if job_location not in ['United States', 'US', 'USA', 'United States of America', 'San Francisco', 'New York']:
+                                continue
+                        today = date.today()
+                        posted_date = datetime.strptime(
+                            job_data['datePosted'], "%Y-%m-%d").date()
+                        date_difference = today - posted_date
+                        if date_difference.days < DAYS_TO_CHECK:
+                            relevant_jobs[job_id] = {
+                                'title': job_title, 'posted_date': posted_date,
+                                'apply': job_url}
     return relevant_jobs

@@ -37,7 +37,7 @@ CompanyID,Type,SearchAPI
 36,GET,https://lge-careers.com//wp-content/themes/lg-career/assets/api/ajax-search.php?ajax=1&keyword={}&o=pubDate&bookmark=0
 37,GET,
 38,GET,
-39,GET,
+39,GET,https://jobs.lever.co/plaid/?
 40,GET,https://boards.greenhouse.io/robinhood
 41,GET,
 42,GET,
