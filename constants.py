@@ -7,6 +7,9 @@ COMPANY_SEARCH_API_CSV = os.path.join(DATA_FOLDER, 'search_api.csv')
 COMPANY_KEYWORDS_CSV = os.path.join(DATA_FOLDER, 'keywords.csv')
 COMPANY_KNOWN_JOBS_CSV = os.path.join(DATA_FOLDER, 'already_known_jobs.csv')
 COMPANY_SEARCH_API_HEADER_CSV = os.path.join(DATA_FOLDER, 'search_headers.csv')
+COMPANY_STATUS_CSV = os.path.join(DATA_FOLDER, 'company_status.csv')
+COMPANY_SEARCH_API_EXTRA_HEADER_CSV = os.path.join(
+    DATA_FOLDER, 'search_extra_headers.csv')
 
 # Log File Location
 LOG_FOLDER_LOCATION = os.path.join(os.getcwd(), "log")

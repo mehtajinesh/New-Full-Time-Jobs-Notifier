@@ -11,6 +11,7 @@ import traceback
 from constants import COMPANY_NAMES_CSV, \
     COMPANY_SEARCH_API_HEADER_CSV, \
     COMPANY_KEYWORDS_CSV, COMPANY_SEARCH_API_CSV, \
+    COMPANY_STATUS_CSV, COMPANY_SEARCH_API_EXTRA_HEADER_CSV,\
     COMPANY_KNOWN_JOBS_CSV, LOG_FILE_LOCATION,\
     SLACK_DEPLOYMENT_NOTIFICATION_WEBHOOK_VAR,\
     SLACK_ERROR_NOTIFICATION_WEBHOOK_VAR,\
@@ -26,7 +27,8 @@ def get_company_data():
         reader = csv.DictReader(company_name_csvfile)
         for row in reader:
             company_info[row['CompanyID']] = {
-                'CompanyName': row['CompanyName']}
+                'CompanyName': row['CompanyName'],
+                'CompanyPortal': row['CompanyPortal']}
     # Get company related keywords
     with open(COMPANY_KEYWORDS_CSV, newline='') as company_keywords_csvfile:
         reader = csv.DictReader(company_keywords_csvfile)
@@ -53,12 +55,28 @@ def get_company_data():
             else:
                 company_info[row['CompanyID']].update({
                     'SearchHeader': json.loads(row['SearchHeader'])})
+    # Get company search API extra headers
+    with open(COMPANY_SEARCH_API_EXTRA_HEADER_CSV, newline='') as company_extra_header_csvfile:
+        reader = csv.DictReader(company_extra_header_csvfile, delimiter='|')
+        for row in reader:
+            if row['SearchExtraHeader'] == "":
+                company_info[row['CompanyID']].update({
+                    'SearchExtraHeader': row['SearchExtraHeader']})
+            else:
+                company_info[row['CompanyID']].update({
+                    'SearchExtraHeader': json.loads(row['SearchExtraHeader'])})
     # Get company known jobs
     with open(COMPANY_KNOWN_JOBS_CSV, newline='') as company_known_csvfile:
         reader = csv.DictReader(company_known_csvfile)
         for row in reader:
             company_info[row['CompanyID']].update(
                 {'KnownJobs': row['KnownJobs']})
+    # Get monitored company status
+    with open(COMPANY_STATUS_CSV, newline='') as company_status_csvfile:
+        reader = csv.DictReader(company_status_csvfile)
+        for row in reader:
+            company_info[row['CompanyID']].update(
+                {'MonitorStatus': row['MonitorStatus']})
     return company_info
 
 
@@ -146,6 +164,7 @@ def main():
     load_dotenv()
     with requests.session() as session:
         current_date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        company_info = None
         try:
             send_deployment_notification_to_user(
                 "Info", f'{current_date_time} - Starting the application ...', session)
@@ -154,19 +173,22 @@ def main():
             # -- Fetching New Data --
             for company_id in company_info:
                 company_name = company_info[company_id]['CompanyName']
-                # Get the keywords for this company
-                keywords = company_info[company_id]['Keywords']
-                if keywords == ['']:
+                monitor_status = company_info[company_id]['MonitorStatus']
+                if monitor_status != 'Enabled':
                     logging.info(
                         f"Bypassing {company_name} as information not available")
                     continue
+                # Get the keywords for this company
+                keywords = company_info[company_id]['Keywords']
+                company_portal = company_info[company_id]['CompanyPortal']
                 # Get the search API url
                 search_api_url = company_info[company_id]['SearchAPI']
                 search_api_type = company_info[company_id]['SearchType']
                 search_api_header = company_info[company_id]['SearchHeader']
+                search_api_extra_header = company_info[company_id]['SearchExtraHeader']
                 known_jobs = company_info[company_id]['KnownJobs'].split('|')
-                relevant_jobs = get_relevant_jobs(company_name, search_api_type,
-                                                  search_api_url, keywords, search_api_header, session)
+                relevant_jobs = get_relevant_jobs(company_name, company_portal, search_api_type,
+                                                  search_api_url, keywords, search_api_header, search_api_extra_header, session)
                 if len(relevant_jobs) < 1:
                     continue
                 for job_id in relevant_jobs:

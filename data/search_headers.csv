@@ -17,8 +17,8 @@ CompanyID|SearchHeader
 16|{"appliedFacets":{"locationCountry":["bc33aa3152ec42d4995f4791a106ed09"]},"limit":20,"offset":0,"searchText":"{}"}
 17|
 18|
-19|
-20|
+19|{ "appliedFacets": { "Location_Country": [ "bc33aa3152ec42d4995f4791a106ed09" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
+20|{ "params" : { "query": "{}"}, "limit": 10, "page": 0}
 21|
 22|
 23|
@@ -28,7 +28,7 @@ CompanyID|SearchHeader
 27|
 28|{"appliedFacets":{"locationCountry":["bc33aa3152ec42d4995f4791a106ed09"]},"limit":20,"offset":0,"searchText":"{}"}
 29|
-30|
+30|{ "appliedFacets": { "locationCountry": [ "bc33aa3152ec42d4995f4791a106ed09" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
 31|
 32|
 33|
@@ -70,7 +70,7 @@ CompanyID|SearchHeader
 69|{"appliedFacets":{"locations":["567b3426fd960124eeba0dbd8d37a05f","b914f96b1779102cc9746a867dbfb2c5","b914f96b1779102cc97453963e19b2a7","1503eab488d5011f7c237683c12ee54a","4497ee3db3de1043e772c47dc515206d","567b3426fd9601916f61f4bc8d378c5f","567b3426fd96015bf9a607bd8d379b5f","b914f96b1779102cc97479ca48a4b2d9","567b3426fd9601e2dd763dc18d37d962","ff2133cb5404108b79cae05325d679bb","567b3426fd960166631f3fc38d376464","567b3426fd9601d7293f46c38d376964","b914f96b1779102cc974801c22c6b2e3"],"jobFamilyGroup":["393c2066a4c001e1024ae40eae000c27","b914f96b1779102cc4a9bfc4484d935a","b914f96b1779102cc4a9d3cd99dd9364"]},"limit":20,"offset":0,"searchText":"{}"}
 70|
 71|
-72|
+72|{ "appliedFacets": { "locations": [ "4f84d9e8a09701011a654d023d230000", "4f84d9e8a09701011a562616cbb50000", "4f84d9e8a09701011a5826e77f1b0000", "4f84d9e8a09701011a642f1514a00000", "ea73980e93db1001ada085087b670000", "4f84d9e8a09701011a6c1b7b22f50000", "4f84d9e8a09701011a6739818d5b0000", "4f84d9e8a09701011a5e85e706270000", "4f84d9e8a09701011a5c0e3d504e0000", "4f84d9e8a09701011a6a14146a620000", "4f84d9e8a09701011a699cf6c87f0000", "4f84d9e8a09701011a68b5dac9b00000", "4f84d9e8a09701011a59840d72110000", "4f84d9e8a09701011a66dba16f6f0000", "4f84d9e8a09701011a75e757d3850000", "4f84d9e8a09701011a7511c284db0000", "4f84d9e8a09701011a64dbcab7bf0000", "4f84d9e8a09701011a67280f91a10000", "4f84d9e8a09701011a649acf3dae0000", "4f84d9e8a09701011a6afaad40e30000", "4f84d9e8a09701011a7497a5fab30000", "4f84d9e8a09701011a5965f4a0e60000", "4f84d9e8a09701011a5b2c8df7e60000", "4f84d9e8a09701011a6f6d34a6070000", "4f84d9e8a09701011a7140a91d9e0000", "4f84d9e8a09701011a69fd38359c0000", "4f84d9e8a09701011a762a24b0900000", "4f84d9e8a09701011a568ed1a62e0000", "4f84d9e8a09701011a59d726dbab0000", "4f84d9e8a09701011a6ff52600b00000", "4f84d9e8a09701011a71d2e0e0e50000", "4f84d9e8a09701011a72ab74b16d0000", "4f84d9e8a09701011a5948763c4b0000", "4f84d9e8a09701011a5a3cea04650000", "4f84d9e8a09701011a6ded3d6b520000", "4f84d9e8a09701011a574498fbfb0000", "4f84d9e8a09701011a75aec3e82c0000", "4f84d9e8a09701011a5a6a0fddb20000", "4f84d9e8a09701011a6e5691b56e0000", "4f84d9e8a09701011a5acafbff7e0000", "4f84d9e8a09701011a73b14216da0000", "4f84d9e8a09701011a73b611c43c0000", "4f84d9e8a09701011a577e62d20b0000", "4f84d9e8a09701011a740910665e0000", "4f84d9e8a09701011a568bcec9810000", "4f84d9e8a09701011a69f86739820000", "4f84d9e8a09701011a66448e51f30000", "4f84d9e8a09701011a75abc108b40000", "4f84d9e8a09701011a5fa89789280000", "4f84d9e8a09701011a578ea2b1250000", "4f84d9e8a09701011a58839baa360000" ], "timeType": [ "e427930185ec0129852df847de610001" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
 73|{"appliedFacets": {"locations":[]}, "limit": 20, "offset": 0, "searchText": "{}"}
 74|{"appliedFacets": {"locations":["f2181f46d1b60184d94157a78f12573e", "f05d1ab69e590126deeaac56421e2680"]}, "limit": 20, "offset": 0, "searchText": "{}"}
 75|{"appliedFacets": {"locationCountry": ["bc33aa3152ec42d4995f4791a106ed09"]},"limit": 20,"offset": 0,"searchText": "{}"}
@@ -78,7 +78,7 @@ CompanyID|SearchHeader
 77|{"appliedFacets": {"locations": ["89df98528c03103bc2ec3169a804c3b6", "89df98528c03103bc2ecc59c58b4c4c9", "89df98528c03103bc2ec1ca985c4c38e", "0fa7047135aa105868cc9db027aa9b9b", "89df98528c03103bc2ecc85ab17cc4ce"]}, "limit": 20, "offset": 0, "searchText": "{}"}
 78|{"appliedFacets": {"Country": ["bc33aa3152ec42d4995f4791a106ed09"]}, "limit": 20, "offset": 0, "searchText": "{}"}
 79|
-80|{"appliedFacets": {}, "limit": 20, "offset": 0, "searchText": "{}"}
+80|{"appliedFacets": { "timeType": [ "2ed180e199081055c65d9d6853aa022d" ] }, "limit": 20, "offset": 0, "searchText": "{}"}
 81|{ "appliedFacets": { "locationHierarchy1": [ "6cee717ed86e0100c34b9ba355480001" ], "jobFamilyGroup": [ "b5c3287c76c20100b318a19542940001", "b5c3287c76c20100b3189b6fdb430000", "b5c3287c76c20100b3189c0c129a0001" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
 82|{ "appliedFacets": { "Country_and_Jurisdiction": [ "bc33aa3152ec42d4995f4791a106ed09" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
 83|{ "operationName": "GetRoles", "variables": { "searchQueryInput": { "page": { "pageSize": 10, "pageNumber": 0 }, "sort": { "sortStrategy": "POSTED_DATE", "sortOrder": "DESC" }, "filters": [ { "filterCategoryType": "LOCATION", "filters": [ { "filter": "United States", "subFilters": [ { "filter": "Indiana", "subFilters": [] }, { "filter": "Kentucky", "subFilters": [] }, { "filter": "Ohio", "subFilters": [] }, { "filter": "California", "subFilters": [ { "filter": "Irvine", "subFilters": [] }, { "filter": "Los Angeles", "subFilters": [] }, { "filter": "San Francisco", "subFilters": [] } ] }, { "filter": "Delaware", "subFilters": [ { "filter": "Wilmington", "subFilters": [] } ] }, { "filter": "Florida", "subFilters": [ { "filter": "West Palm Beach", "subFilters": [] } ] }, { "filter": "Georgia", "subFilters": [ { "filter": "Atlanta", "subFilters": [] } ] }, { "filter": "Illinois", "subFilters": [ { "filter": "Chicago", "subFilters": [] } ] }, { "filter": "Michigan", "subFilters": [ { "filter": "Troy", "subFilters": [] } ] }, { "filter": "New Jersey", "subFilters": [ { "filter": "Jersey City", "subFilters": [] } ] }, { "filter": "New York", "subFilters": [ { "filter": "Albany", "subFilters": [] }, { "filter": "New York", "subFilters": [] } ] }, { "filter": "Texas", "subFilters": [ { "filter": "Dallas", "subFilters": [] }, { "filter": "Richardson", "subFilters": [] } ] }, { "filter": "Utah", "subFilters": [ { "filter": "Draper", "subFilters": [] }, { "filter": "Salt Lake City", "subFilters": [] } ] }, { "filter": "Virginia", "subFilters": [ { "filter": "Mclean", "subFilters": [] } ] }, { "filter": "Washington", "subFilters": [ { "filter": "Seattle", "subFilters": [] } ] } ] } ] } ], "experiences": [ "PROFESSIONAL", "EARLY_CAREER" ], "searchTerm": "{}" } }, "query": "query GetRoles($searchQueryInput: RoleSearchQueryInput!) {\n  roleSearch(searchQueryInput: $searchQueryInput) {\n    totalCount\n    items {\n      roleId\n      corporateTitle\n      jobTitle\n      jobFunction\n      locations {\n        primary\n        state\n        country\n        city\n        __typename\n      }\n      status\n      division\n      skills\n      bookmarkId\n      jobType {\n        code\n        description\n        __typename\n      }\n      externalSource {\n        sourceId\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}" }
@@ -88,3 +88,5 @@ CompanyID|SearchHeader
 87|
 88|
 89|{ "appliedFacets": { "Country": [ "bc33aa3152ec42d4995f4791a106ed09" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
+90|{ "keyword": "{}", "limit": 10, "offset": 0, "job_category_id_list": [], "tag_id_list": [], "location_code_list": [ "CT_100762", "CT_247", "CT_100764", "CT_221", "CT_100747", "CT_101443", "CT_94", "CT_243", "CT_104", "CT_114", "CT_75", "CT_130", "CT_157", "CT_242", "CT_233", "CT_1103355", "CT_103", "CT_1000001" ], "subject_id_list": [], "recruitment_id_list": [], "portal_type": 6, "job_function_id_list": [], "portal_entrance": 1 }
+91|{"advancedSearchFiltersSelectionParam":{"searchFilterSelections":[{"id":"LOCATION","selectedValues":[]},{"id":"JOB_FIELD","selectedValues":[]},{"id":"URGENT_JOB","selectedValues":[]},{"id":"EMPLOYEE_STATUS","selectedValues":[]},{"id":"WILL_TRAVEL","selectedValues":[]},{"id":"JOB_SHIFT","selectedValues":[]}]},"fieldData":{"fields":{"JOB_NUMBER":"","JOB_TITLE":"","KEYWORD":"{}"},"valid":true},"filterSelectionParam":{"searchFilterSelections":[{"id":"POSTING_DATE","selectedValues":[]},{"id":"ORGANIZATION","selectedValues":[]},{"id":"LOCATION","selectedValues":["217300106849"]},{"id":"JOB_FIELD","selectedValues":[]},{"id":"JOB_TYPE","selectedValues":[]},{"id":"JOB_SCHEDULE","selectedValues":[]},{"id":"JOB_LEVEL","selectedValues":[]}]},"multilineEnabled":false,"pageNo":1,"sortingSelection":{"ascendingSortingOrder":"false","sortBySelectionParam":"3"}}
