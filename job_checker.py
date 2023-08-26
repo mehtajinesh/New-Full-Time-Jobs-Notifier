@@ -47,12 +47,13 @@ def get_relevant_jobs(company_name: str, company_portal, search_api_type: str, s
         Dict: relevant jobs
     """
     relevant_jobs = {}
+    original_search_api_url = search_api_url
     try:
         for keyword in keywords:
             if search_api_type == "GET":
                 # Push the keyword to the url (replace it with curly brackets)
                 # Update the search url with the keywords
-                search_api_url = search_api_url.replace(
+                search_api_url = original_search_api_url.replace(
                     "{}", urllib.parse.quote(keyword))
                 # For each keyword, get the job details using keyword, api and headers
                 logging.info(
@@ -127,6 +128,12 @@ def get_relevant_jobs(company_name: str, company_portal, search_api_type: str, s
             elif company_name == 'AMD':
                 relevant_jobs.update(
                     for_amd(keyword, response, search_api_url, session))
+            elif company_name == 'Cisco':
+                relevant_jobs.update(
+                    for_cisco(keyword, response, search_api_url, session))
+            elif company_name == 'SchniederElectric':
+                relevant_jobs.update(
+                    for_schnieder_electric(keyword, response, search_api_url, session))
     # Oracle Cloud Based Companies
             elif company_name == 'JPMorgon':
                 relevant_jobs.update(for_jpmorgon(
@@ -200,11 +207,20 @@ def get_relevant_jobs(company_name: str, company_portal, search_api_type: str, s
             elif company_name == 'Disney':
                 relevant_jobs.update(for_disney(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'Paypal':
+                relevant_jobs.update(for_paypal(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'Workday':
+                relevant_jobs.update(for_workday(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
     # Greenhouse Based Companies
             elif company_name == 'Apollo.io':
                 relevant_jobs.update(greenhouse_based_company(
                     response, keyword, session))
             elif company_name == 'Samsung Research America':
+                relevant_jobs.update(greenhouse_based_company(
+                    response, keyword, session))
+            elif company_name == 'OpenAI':
                 relevant_jobs.update(greenhouse_based_company(
                     response, keyword, session))
     except JSONDecodeError as e:
@@ -1017,7 +1033,7 @@ def for_amd(keyword, response, search_api_url, session) -> Dict[str, Dict]:
     """
     def get_relevant_jobs_from_json_response(page_response, keyword):
         page_relevant_jobs = {}
-        total_jobs = page_response["count"]
+        total_jobs = page_response["totalCount"]
         if total_jobs == 0:
             return page_relevant_jobs, 0
         page_available_jobs = page_response["jobs"]
@@ -1047,6 +1063,133 @@ def for_amd(keyword, response, search_api_url, session) -> Dict[str, Dict]:
     if no_of_pages > 1:
         curr_page_count = 2
         while (curr_page_count < min(5, no_of_pages)):
+            new_search_api_url = search_api_url + f'&page={curr_page_count}'
+            new_response = get_response_for_search_url(
+                "GET", new_search_api_url, session)
+            if not new_response:
+                return relevant_jobs
+            new_relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
+                new_response, keyword)
+            relevant_jobs.update(new_relevant_jobs)
+            curr_page_count += 1
+    return relevant_jobs
+
+
+def for_cisco(keyword, response, search_api_url, session) -> Dict[str, Dict]:
+    """gets the job information from cisco's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): initial response from the search api url
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    def get_relevant_jobs_from_html_response(page_response, keyword):
+        response_relevant_jobs = {}
+        soup = BeautifulSoup(page_response.strip(), 'html.parser')
+        scripts = soup.find_all('tbody')
+        if len(scripts) > 0:
+            data = scripts[0]
+            for item in data.contents:
+                if item.text == '\n':
+                    continue
+                temp = item.contents[1]
+                if temp.text == 'No results':
+                    break
+                job_link = temp.contents[0]['href']
+                job_id = job_link.split('/')[-1]
+                curr_job_title = item.contents[1].contents[0].text
+                if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                    ignore_position = False
+                    for term in TERMS_TO_IGNORE:
+                        if term in curr_job_title:
+                            ignore_position = True
+                            break
+                    if not ignore_position:
+                        today = date.today()
+                        new_response_date = session.get(url=job_link)
+                        date_soup = BeautifulSoup(
+                            new_response_date.text.strip(), 'html.parser')
+                        date_scripts = date_soup.find_all(
+                            'script', {'type': 'application/ld+json'})
+                        date_inter = date_scripts[0].contents[0]
+                        date_json = json.loads(date_inter)
+                        posted_date = datetime.strptime(
+                            date_json['datePosted'], "%Y-%m-%d").date()
+                        date_difference = today - posted_date
+                        if date_difference.days < DAYS_TO_CHECK:
+                            relevant_jobs[job_id] = {
+                                'title': curr_job_title, 'posted_date': posted_date,
+                                'apply': job_link}
+        return response_relevant_jobs
+
+    response_total = session.get(
+        url=f"https://jobs.cisco.com/jobs/SearchJobsResultsAJAX/{urllib.parse.quote(keyword)}?21178=%5B169482%5D&21178_format=6020&21180=%5B164,163%5D&21180_format=6022&listFilterMode=1")
+    total_jobs = int(response_total.content.strip())
+    if total_jobs == 0:
+        return {}
+    no_of_pages = math.ceil(total_jobs / 25)
+    relevant_jobs = get_relevant_jobs_from_html_response(
+        response, keyword)
+    if no_of_pages > 1:
+        curr_page_count = 1
+        while (curr_page_count < min(20, no_of_pages)):
+            new_search_api_url = search_api_url + \
+                f'&projectOffset={25*curr_page_count}'
+            new_response = get_response_for_search_url(
+                "GET", new_search_api_url, session)
+            if not new_response:
+                return relevant_jobs
+            new_relevant_jobs = get_relevant_jobs_from_html_response(
+                new_response, keyword)
+            relevant_jobs.update(new_relevant_jobs)
+            curr_page_count += 1
+    return relevant_jobs
+
+
+def for_schnieder_electric(keyword, response, search_api_url, session) -> Dict[str, Dict]:
+    """gets the job information from schnieder electric's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): initial response from the search api url
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    def get_relevant_jobs_from_json_response(page_response, keyword):
+        page_relevant_jobs = {}
+        total_jobs = page_response["totalCount"]
+        if total_jobs == 0:
+            return page_relevant_jobs, 0
+        page_available_jobs = page_response["jobs"]
+        no_of_pages = math.ceil(total_jobs / 10)
+        for job in page_available_jobs:
+            if 'req_id' in job['data']:
+                job_id = job['data']['req_id']
+                curr_job_title = job['data']['title']
+                posted_date = datetime.strptime(
+                    job['data']['posted_date'], "%B %d, %Y").date()
+                today = date.today()
+                if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                    ignore_position = False
+                    for term in TERMS_TO_IGNORE:
+                        if term in curr_job_title:
+                            ignore_position = True
+                            break
+                    if not ignore_position:
+                        date_difference = today - posted_date
+                        if date_difference.days < DAYS_TO_CHECK:
+                            page_relevant_jobs[job_id] = {
+                                'title': curr_job_title, 'posted_date': posted_date, 'apply': job['data']['apply_url']}
+        return page_relevant_jobs, no_of_pages
+
+    relevant_jobs, no_of_pages = get_relevant_jobs_from_json_response(
+        response, keyword)
+    if no_of_pages > 1:
+        curr_page_count = 2
+        while (curr_page_count < min(20, no_of_pages)):
             new_search_api_url = search_api_url + f'&page={curr_page_count}'
             new_response = get_response_for_search_url(
                 "GET", new_search_api_url, session)
@@ -1196,6 +1339,8 @@ def workday_based_company(company_page_respone, company_job_keyword, company_app
 
     def get_relevant_jobs_from_json_response(page_response, keyword, apply_link_prefix):
         page_relevant_jobs = {}
+        if "total" not in page_response:
+            return page_relevant_jobs, 0
         total_jobs = page_response["total"]
         no_of_pages = math.ceil(total_jobs / 20)
         page_available_jobs = page_response["jobPostings"]
@@ -1569,6 +1714,38 @@ def for_disney(keyword: str, search_api_url: str, response: Dict, search_api_hea
         Dict[str, Dict]: relevant jobs
     """
     return workday_based_company(response, keyword, "https://disney.wd5.myworkdayjobs.com/en-US/disneycareer", search_api_header, search_api_url, session)
+
+
+def for_paypal(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions from paypal's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header
+        response (Dict): response for initial query
+        session (request): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://wd1.myworkdaysite.com/recruiting/paypal/jobs", search_api_header, search_api_url, session)
+
+
+def for_workday(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions from workday's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header
+        response (Dict): response for initial query
+        session (request): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://workday.wd5.myworkdayjobs.com/Workday", search_api_header, search_api_url, session)
 
 # Greenhouse based Companies
 
