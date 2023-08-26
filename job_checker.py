@@ -134,6 +134,9 @@ def get_relevant_jobs(company_name: str, company_portal, search_api_type: str, s
             elif company_name == 'SchniederElectric':
                 relevant_jobs.update(
                     for_schnieder_electric(keyword, response, search_api_url, session))
+            elif company_name == 'Stripe':
+                relevant_jobs.update(
+                    for_stripe(keyword, response))
     # Oracle Cloud Based Companies
             elif company_name == 'JPMorgon':
                 relevant_jobs.update(for_jpmorgon(
@@ -1170,7 +1173,7 @@ def for_schnieder_electric(keyword, response, search_api_url, session) -> Dict[s
                 job_id = job['data']['req_id']
                 curr_job_title = job['data']['title']
                 posted_date = datetime.strptime(
-                    job['data']['posted_date'], "%B %d, %Y").date()
+                    job['data']['meta_data']['last_mod'], "%Y-%m-%dT%H:%M:%S%z").date()
                 today = date.today()
                 if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
                     ignore_position = False
@@ -1200,6 +1203,44 @@ def for_schnieder_electric(keyword, response, search_api_url, session) -> Dict[s
             relevant_jobs.update(new_relevant_jobs)
             curr_page_count += 1
     return relevant_jobs
+
+
+def for_stripe(keyword, response) -> Dict[str, Dict]:
+    """gets the job information from stripe's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): initial response from the search api url
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    relevant_jobs = {}
+    soup = BeautifulSoup(response.strip(), 'html.parser')
+    scripts = soup.find_all('tbody')
+    if len(scripts) > 0:
+        data = scripts[0]
+        for item in data.contents:
+            if item.text == '\n':
+                continue
+            temp = item.contents[1]
+            if temp.text == 'No results':
+                break
+            job_link = temp.contents[0]['href']
+            job_id = job_link.split('/')[-1]
+            curr_job_title = item.contents[1].contents[0].text
+            if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+                ignore_position = False
+                for term in TERMS_TO_IGNORE:
+                    if term in curr_job_title:
+                        ignore_position = True
+                        break
+                if not ignore_position:
+                    relevant_jobs[job_id] = {
+                        'title': curr_job_title, 'posted_date': date.today(),
+                        'apply': job_link}
+    return relevant_jobs
+
 
 # Oracle Cloud Based Companies
 
