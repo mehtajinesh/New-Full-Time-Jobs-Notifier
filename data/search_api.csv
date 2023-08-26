@@ -39,7 +39,7 @@ CompanyID,Type,SearchAPI
 38,GET,
 39,GET,https://jobs.lever.co/plaid/?
 40,GET,https://boards.greenhouse.io/robinhood
-41,GET,
+41,POST,https://mastercard.wd1.myworkdayjobs.com/wday/cxs/mastercard/CorporateCareers/jobs
 42,GET,
 43,GET,
 44,GET,
