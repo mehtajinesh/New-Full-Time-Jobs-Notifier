@@ -137,6 +137,12 @@ def get_relevant_jobs(company_name: str, company_portal, search_api_type: str, s
             elif company_name == 'Stripe':
                 relevant_jobs.update(
                     for_stripe(keyword, response))
+            elif company_name == 'Tesla':
+                relevant_jobs.update(
+                    for_tesla(keyword, response))
+            elif company_name == 'Databricks':
+                relevant_jobs.update(for_databricks(
+                    response, keyword, session))
     # Oracle Cloud Based Companies
             elif company_name == 'JPMorgon':
                 relevant_jobs.update(for_jpmorgon(
@@ -215,6 +221,12 @@ def get_relevant_jobs(company_name: str, company_portal, search_api_type: str, s
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
             elif company_name == 'Workday':
                 relevant_jobs.update(for_workday(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'KLA':
+                relevant_jobs.update(for_kla(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'Snapchat':
+                relevant_jobs.update(for_snapchat(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
     # Greenhouse Based Companies
             elif company_name == 'Apollo.io':
@@ -1253,6 +1265,41 @@ def for_stripe(keyword, response) -> Dict[str, Dict]:
     return relevant_jobs
 
 
+def for_tesla(keyword, response) -> Dict[str, Dict]:
+    """gets the job information from tesla's career page
+
+    Args:
+        keyword (str): keyword to match with job title
+        response (Dict): initial response from the search api url
+
+    Returns:
+        [str, Dict]: relevant jobs
+    """
+    # relevant_jobs = {}
+    # all_locations_data = response["geo"][0]["sites"][0]['states']
+    # location_ids = []
+    # for state in all_locations_data:
+    #     cities = state['cities']
+    #     for city in cities.values():
+    #         location_ids.extend(city)
+    # total_jobs = response["listings"]
+    # if len(total_jobs) > 0:
+    #     for job in total_jobs:
+    #         if 'id' in job:
+
+    #             if fuzz.ratio(curr_job_title, keyword) > FUZZY_RATIO_MATCH:
+    #                 ignore_position = False
+    #                 for term in TERMS_TO_IGNORE:
+    #                     if term in curr_job_title:
+    #                         ignore_position = True
+    #                         break
+    #                 if not ignore_position:
+    #                     relevant_jobs[job_id] = {
+    #                         'title': curr_job_title, 'posted_date': date.today(),
+    #                         'apply': job_link}
+    # return relevant_jobs
+
+
 # Oracle Cloud Based Companies
 
 
@@ -1799,6 +1846,38 @@ def for_workday(keyword: str, search_api_url: str, response: Dict, search_api_he
     """
     return workday_based_company(response, keyword, "https://workday.wd5.myworkdayjobs.com/Workday", search_api_header, search_api_url, session)
 
+
+def for_kla(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions kla's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header
+        response (Dict): response for initial query
+        session (request): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://kla.wd1.myworkdayjobs.com/Search", search_api_header, search_api_url, session)
+
+
+def for_snapchat(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions kla's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header
+        response (Dict): response for initial query
+        session (request): request session object
+
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://wd1.myworkdaysite.com/en-US/recruiting/snapchat/snap/", search_api_header, search_api_url, session)
+
 # Greenhouse based Companies
 
 
@@ -1900,7 +1979,7 @@ def for_plaid(company_page_respone, company_job_keyword, session):
 
 
 def for_lucid(company_page_respone, company_job_keyword, session):
-    return lever_based_company(company_page_respone, company_job_keyword, session, ['ATLANTA, GA','BEVERLY HILLS, CA','BOSTON, MA','CASA GRANDE, AZ','CHARLOTTE, NC','CHICAGO, IL','COLDWATER, MI','CORTE MADERA, CA','COSTA MESA, CA','DALLAS, TX','DENVER, CO','HOUSTON, TX','MANHASSET, NY','MCLEAN, VA','MIAMI, FL','MILLBRAE, CA','NASHVILLE, TN','NATICK, MA','NEW YORK CITY, NY','NEWARK, CA','NEWPORT BEACH, CA','OAK BROOK, IL','PLAINVIEW, NY','REMOTE','RIVIERA BEACH, FL','ROCKLIN, CA','SAN DIEGO, CA','SANTA CLARA, CA','SCOTTSDALE, AZ','SEATTLE, WA','SHORT HILLS, NJ','TEMPE, AZ','TORRANCE, CA','TROY, MI','WEST PALM BEACH, FL','WHITE PLAINS, NY'])
+    return lever_based_company(company_page_respone, company_job_keyword, session, ['ATLANTA, GA', 'BEVERLY HILLS, CA', 'BOSTON, MA', 'CASA GRANDE, AZ', 'CHARLOTTE, NC', 'CHICAGO, IL', 'COLDWATER, MI', 'CORTE MADERA, CA', 'COSTA MESA, CA', 'DALLAS, TX', 'DENVER, CO', 'HOUSTON, TX', 'MANHASSET, NY', 'MCLEAN, VA', 'MIAMI, FL', 'MILLBRAE, CA', 'NASHVILLE, TN', 'NATICK, MA', 'NEW YORK CITY, NY', 'NEWARK, CA', 'NEWPORT BEACH, CA', 'OAK BROOK, IL', 'PLAINVIEW, NY', 'REMOTE', 'RIVIERA BEACH, FL', 'ROCKLIN, CA', 'SAN DIEGO, CA', 'SANTA CLARA, CA', 'SCOTTSDALE, AZ', 'SEATTLE, WA', 'SHORT HILLS, NJ', 'TEMPE, AZ', 'TORRANCE, CA', 'TROY, MI', 'WEST PALM BEACH, FL', 'WHITE PLAINS, NY'])
 
 # SmartRecruiters Based Companies
 

@@ -35,7 +35,7 @@ CompanyID,CompanyName,CompanyPortal
 34,Workday,Workday
 35,OpenAI,GreenHouse
 36,LG,Others
-37,Databricks,Others
+37,Databricks,GreenHouse
 38,Stripe,Others
 39,Plaid,Lever
 40,Robinhood,GreenHouse
@@ -61,7 +61,7 @@ CompanyID,CompanyName,CompanyPortal
 60,Nokia,Others
 61,Siemens,Others
 62,Yahoo,Others
-63,Akamai Technologies,Others
+63,Tesla,Others
 64,APC,Others
 65,Dassault,Others
 66,MathWorks,Others
@@ -92,3 +92,5 @@ CompanyID,CompanyName,CompanyPortal
 91,Akamai,Akamai
 92,Bosch,SmartRecruiters
 93,Lucid,Lever
+94,KLA,Workday
+95,Snapchat,Workday

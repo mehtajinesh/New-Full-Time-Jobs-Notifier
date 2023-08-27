@@ -65,7 +65,7 @@ CompanyID,MonitorStatus
 64,Disabled
 65,Disabled
 66,Disabled
-67,Enabled
+67,Disabled
 68,Enabled
 69,Enabled
 70,Enabled
@@ -92,3 +92,5 @@ CompanyID,MonitorStatus
 91,Enabled
 92,Enabled
 93,Enabled
+94,Enabled
+95,Enabled
