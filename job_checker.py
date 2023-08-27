@@ -228,7 +228,14 @@ def get_relevant_jobs(company_name: str, company_portal, search_api_type: str, s
                     response, keyword, session))
     # Lever Based Companies
             elif company_name == 'Plaid':
-                relevant_jobs.update(lever_based_company(
+                relevant_jobs.update(for_plaid(
+                    response, keyword, session))
+            elif company_name == 'Lucid':
+                relevant_jobs.update(for_lucid(
+                    response, keyword, session))
+    # SmartRecruiters Based Companies
+            elif company_name == 'Bosch':
+                relevant_jobs.update(smartrecruiters_based_company(
                     response, keyword, session))
     except JSONDecodeError as e:
         logging.info(
@@ -1848,7 +1855,7 @@ def greenhouse_based_company(company_page_respone, company_job_keyword, session)
 
 # Lever Based Companies
 
-def lever_based_company(company_page_respone, company_job_keyword, session):
+def lever_based_company(company_page_respone, company_job_keyword, session, locations):
     relevant_jobs = {}
     soup = BeautifulSoup(company_page_respone.strip(), 'html.parser')
     available_jobs = soup.find_all("div", {"class": "posting"})
@@ -1875,7 +1882,7 @@ def lever_based_company(company_page_respone, company_job_keyword, session):
                         job_data = json.loads(job_data[0].text.strip())
                         job_location = job_data['jobLocation']['address']['addressLocality']
                         if job_location:
-                            if job_location not in ['United States', 'US', 'USA', 'United States of America', 'San Francisco', 'New York']:
+                            if job_location not in locations:
                                 continue
                         today = date.today()
                         posted_date = datetime.strptime(
@@ -1885,4 +1892,60 @@ def lever_based_company(company_page_respone, company_job_keyword, session):
                             relevant_jobs[job_id] = {
                                 'title': job_title, 'posted_date': posted_date,
                                 'apply': job_url}
+    return relevant_jobs
+
+
+def for_plaid(company_page_respone, company_job_keyword, session):
+    return lever_based_company(company_page_respone, company_job_keyword, session, ['United States', 'US', 'USA', 'United States of America', 'San Francisco', 'New York'])
+
+
+def for_lucid(company_page_respone, company_job_keyword, session):
+    return lever_based_company(company_page_respone, company_job_keyword, session, ['ATLANTA, GA','BEVERLY HILLS, CA','BOSTON, MA','CASA GRANDE, AZ','CHARLOTTE, NC','CHICAGO, IL','COLDWATER, MI','CORTE MADERA, CA','COSTA MESA, CA','DALLAS, TX','DENVER, CO','HOUSTON, TX','MANHASSET, NY','MCLEAN, VA','MIAMI, FL','MILLBRAE, CA','NASHVILLE, TN','NATICK, MA','NEW YORK CITY, NY','NEWARK, CA','NEWPORT BEACH, CA','OAK BROOK, IL','PLAINVIEW, NY','REMOTE','RIVIERA BEACH, FL','ROCKLIN, CA','SAN DIEGO, CA','SANTA CLARA, CA','SCOTTSDALE, AZ','SEATTLE, WA','SHORT HILLS, NJ','TEMPE, AZ','TORRANCE, CA','TROY, MI','WEST PALM BEACH, FL','WHITE PLAINS, NY'])
+
+# SmartRecruiters Based Companies
+
+
+def smartrecruiters_based_company(company_page_respone, company_job_keyword, session):
+    relevant_jobs = {}
+    soup = BeautifulSoup(company_page_respone.strip(), 'html.parser')
+    available_jobs = soup.find_all("li", {"class": "opening-job"})
+    if len(available_jobs) > 0:
+        for job in available_jobs:
+            if "href" not in job.contents[0].attrs:
+                continue
+            # check if department_jobs is div or not
+            job_url = job.contents[0]["href"]
+            job_id = job_url.split("=")[-1]
+            job_title = job.contents[0].text.replace(
+                'Full-time', '').split('-')[0].split('(')[0]
+            if fuzz.ratio(job_title, company_job_keyword) > FUZZY_RATIO_MATCH:
+                ignore_position = False
+                for term in TERMS_TO_IGNORE:
+                    if term in job_title:
+                        ignore_position = True
+                        break
+                if not ignore_position:
+                    job_data_response = get_response_for_search_url(
+                        "GET", job_url, session)
+                    job_data_soup = BeautifulSoup(
+                        job_data_response.strip(), 'html.parser')
+                    # get location
+                    job_location_data = job_data_soup.find_all(
+                        "meta", {"itemprop": "addressCountry"})
+                    job_location = job_location_data[0]['content']
+                    if job_location:
+                        if job_location not in ['United States', 'US', 'USA', 'United States of America', 'San Francisco', 'New York']:
+                            continue
+                    # get posted date
+                    job_date = job_data_soup.find_all(
+                        "meta", {"itemprop": "datePosted"})
+                    today = date.today()
+                    posted_date = date.today()
+                    if len(job_date) > 0:
+                        posted_date = datetime.strptime(
+                            job_date[0]['content'], "%Y-%m-%dT%H:%M:%S.%fZ").date()
+                    date_difference = today - posted_date
+                    if date_difference.days < DAYS_TO_CHECK:
+                        relevant_jobs[job_id] = {
+                            'title': job_title, 'posted_date': posted_date, 'apply': job_url}
     return relevant_jobs
