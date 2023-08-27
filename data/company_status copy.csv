@@ -37,9 +37,9 @@ CompanyID,MonitorStatus
 36,Disabled
 37,Disabled
 38,Disabled
-39,Disabled
+39,Enabled
 40,Enabled
-41,Disabled
+41,Enabled
 42,Disabled
 43,Disabled
 44,Disabled
@@ -90,3 +90,4 @@ CompanyID,MonitorStatus
 89,Enabled
 90,Enabled
 91,Enabled
+92,Enabled

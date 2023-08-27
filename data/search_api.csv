@@ -90,3 +90,5 @@ CompanyID,Type,SearchAPI
 89,POST,https://db.wd3.myworkdayjobs.com/wday/cxs/db/DBWebsite/jobs
 90,POST,https://careers.tiktok.com/api/v1/search/job/posts?job_category_id_list=&tag_id_list=&location_code_list=CT_100762%2CCT_247%2CCT_100764%2CCT_221%2CCT_100747%2CCT_101443%2CCT_94%2CCT_243%2CCT_104%2CCT_114%2CCT_75%2CCT_130%2CCT_157%2CCT_242%2CCT_233%2CCT_1103355%2CCT_103%2CCT_1000001&subject_id_list=&recruitment_id_list=&portal_type=6&job_function_id_list=&portal_entrance=1&_signature=Ib7KPAAgEARWI1wVOxkUmiG-yiAAEVc
 91,POST,https://akamaicareers.inflightcloud.com/careersection/rest/jobboard/searchjobs?portal=8200106849&lang=en
+92,GET,https://careers.smartrecruiters.com/BoschGroup/us?search={}
+93,GET,https://jobs.lever.co/lucidmotors
