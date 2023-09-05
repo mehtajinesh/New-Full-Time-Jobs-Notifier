@@ -39,5 +39,10 @@ TERMS_TO_IGNORE = [
     "PMTS",
     "Internship",
     "Infrastructure",
-    "SMTS"
+    "SMTS",
+    "Intern",
+    "Co-op",
+    "Mechanical",
+    "Director",
+    "Lead"
 ]
