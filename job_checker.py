@@ -228,6 +228,57 @@ def get_relevant_jobs(company_name: str, company_portal, search_api_type: str, s
             elif company_name == 'Snapchat':
                 relevant_jobs.update(for_snapchat(
                     keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'HPE':
+                relevant_jobs.update(for_hpe(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'Overstock':
+                relevant_jobs.update(for_overstock(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'Regions':
+                relevant_jobs.update(for_regions(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "USFoods":
+                relevant_jobs.update(for_usfoods(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "Activision Blizzard Media":
+                relevant_jobs.update(for_activision_blizzard_media(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "Carrier":
+                relevant_jobs.update(for_carrier(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "Dell":
+                relevant_jobs.update(for_dell(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "ULine":
+                relevant_jobs.update(for_uline(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "Yahoo":
+                relevant_jobs.update(for_yahoo(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "Gartner":
+                relevant_jobs.update(for_gartner(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "BroadInstitute":
+                relevant_jobs.update(for_broad_institute(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "Walmart":
+                relevant_jobs.update(for_walmart(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "WarnerBrothers":
+                relevant_jobs.update(for_warner_brothers(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "SonyGlobal":
+                relevant_jobs.update(for_sony_global(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == "SonyPictures":
+                relevant_jobs.update(for_sony_pictures(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'Fidelity':
+                relevant_jobs.update(for_fidelity(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
+            elif company_name == 'NorthWestern Mutual':
+                relevant_jobs.update(for_northwestern_mutual(
+                    keyword, search_api_url, response, copy.deepcopy(search_api_header), session))
     # Greenhouse Based Companies
             elif company_name == 'Apollo.io':
                 relevant_jobs.update(greenhouse_based_company(
@@ -1877,6 +1928,267 @@ def for_snapchat(keyword: str, search_api_url: str, response: Dict, search_api_h
         Dict[str, Dict]: relevant jobs
     """
     return workday_based_company(response, keyword, "https://wd1.myworkdaysite.com/en-US/recruiting/snapchat/snap/", search_api_header, search_api_url, session)
+
+
+def for_hpe(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions hpe's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header
+        response (Dict): response for initial query
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://hpe.wd5.myworkdayjobs.com/en-US/Jobsathpe", search_api_header, search_api_url, session)
+
+
+def for_overstock(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions overstock's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header 
+        response (Dict): response for initial query
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://overstock.wd5.myworkdayjobs.com/Overstock_Careers", search_api_header, search_api_url, session)
+
+
+def for_regions(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions regions's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header 
+        response (Dict): response for initial query
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://regions.wd5.myworkdayjobs.com/Regions_Careers", search_api_header, search_api_url, session)
+
+
+def for_usfoods(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions usfoods's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header 
+        response (Dict): response for initial query
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://usfoods.wd1.myworkdayjobs.com/usfoodscareersExternal", search_api_header, search_api_url, session)
+
+
+def for_activision_blizzard_media(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job positions activision blizzard media's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header 
+        response (Dict): response for initial query
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://activision.wd1.myworkdayjobs.com/King_External_Careers", search_api_header, search_api_url, session)
+
+
+def for_carrier(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available job carrier's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header 
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://carrier.wd5.myworkdayjobs.com/jobs", search_api_header, search_api_url, session)
+
+
+def for_dell(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available dell's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header 
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://dell.wd1.myworkdayjobs.com/External", search_api_header, search_api_url, session)
+
+
+def for_uline(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available dell's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header 
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://uline.wd1.myworkdayjobs.com/External", search_api_header, search_api_url, session)
+
+
+def for_yahoo(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available yahoo's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header 
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://ouryahoo.wd5.myworkdayjobs.com/en-US/careers", search_api_header, search_api_url, session)
+
+
+def for_gartner(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available gartner's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header 
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://gartner.wd5.myworkdayjobs.com/EXT", search_api_header, search_api_url, session)
+
+
+def for_broad_institute(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available broad institute's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        response (Dict): response for initial query
+        search_api_header (Dict): search api header 
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+    return workday_based_company(response, keyword, "https://broadinstitute.wd1.myworkdayjobs.com/broad_institute", search_api_header, search_api_url, session)
+
+
+def for_walmart(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available walmart's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header 
+        response (Dict): response for initial query
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+
+    return workday_based_company(response, keyword, "https://walmart.wd5.myworkdayjobs.com/en-US/WalmartExternal", search_api_header, search_api_url, session)
+
+
+def for_warner_brothers(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available warner brothers's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header 
+        response (Dict): response for initial query
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+
+    return workday_based_company(response, keyword, "https://warnerbros.wd5.myworkdayjobs.com/global", search_api_header, search_api_url, session)
+
+
+def for_sony_global(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available sony global's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header 
+        response (Dict): response for initial query
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+
+    return workday_based_company(response, keyword, "https://sonyglobal.wd1.myworkdayjobs.com/SonyGlobalCareers", search_api_header, search_api_url, session)
+
+
+def for_sony_pictures(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available sony pictures's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header
+        response (Dict): response for initial query
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+
+    return workday_based_company(response, keyword, "https://spe.wd1.myworkdayjobs.com/Sonypictures", search_api_header, search_api_url, session)
+
+
+def for_fidelity(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available fidelity's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header
+        response (Dict): response for initial query
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+
+    return workday_based_company(response, keyword, "https://wd1.myworkdaysite.com/en-US/recruiting/fmr/FidelityCareers", search_api_header, search_api_url, session)
+
+
+def for_northwestern_mutual(keyword: str, search_api_url: str, response: Dict, search_api_header: Dict, session) -> Dict[str, Dict]:
+    """gets available fidelity's career page
+
+    Args:
+        keyword (str): keyword to match in job title
+        search_api_url (str): search api url
+        search_api_header (Dict): search api header
+        response (Dict): response for initial query
+        session (request): request session object
+    Returns:
+        Dict[str, Dict]: relevant jobs
+    """
+
+    return workday_based_company(response, keyword, "https://northwesternmutual.wd5.myworkdayjobs.com/CORPORATE-CAREERS", search_api_header, search_api_url, session)
 
 # Greenhouse based Companies
 
