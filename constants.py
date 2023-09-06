@@ -44,5 +44,6 @@ TERMS_TO_IGNORE = [
     "Co-op",
     "Mechanical",
     "Director",
-    "Lead"
+    "Lead",
+    "Data Engineer"
 ]
