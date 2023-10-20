@@ -709,6 +709,12 @@ def for_oracle(keyword: str, response: Dict) -> Dict[str, Dict]:
         Dict[str, Dict]: relevant jobs
     """
     relevant_jobs = {}
+    if "items" not in response:
+        return relevant_jobs
+    if len(response['items']) == 0:
+        return relevant_jobs
+    if "requisitionList" not in response['items'][0]:
+        return relevant_jobs
     available_jobs = response['items'][0]['requisitionList']
     for job in available_jobs:
         if 'title' in job:
@@ -1022,6 +1028,10 @@ def for_akamai(keyword, response, search_api_url, search_api_header, search_api_
     """
     def get_relevant_jobs_from_json_response(page_response, keyword):
         page_relevant_jobs = {}
+        if "pagingData" not in page_response:
+            return page_relevant_jobs
+        if "totalCount" not in page_response["pagingData"]:
+            return page_relevant_jobs
         total_jobs = page_response["pagingData"]["totalCount"]
         page_available_jobs = page_response["requisitionList"]
         if (total_jobs == 0) or (len(page_available_jobs) == 0):
@@ -1076,7 +1086,7 @@ def for_atlassian(keyword, response) -> Dict[str, Dict]:
     """
     relevant_jobs = {}
     if 'postings' not in response:
-        return
+        return relevant_jobs
     available_jobs = response['postings']
     for job in available_jobs:
         if 'id' in job:
@@ -1113,10 +1123,14 @@ def for_amd(keyword, response, search_api_url, session) -> Dict[str, Dict]:
     """
     def get_relevant_jobs_from_json_response(page_response, keyword):
         page_relevant_jobs = {}
+        if "totalCount" not in page_response:
+            return page_relevant_jobs
         total_jobs = page_response["totalCount"]
         if total_jobs == 0:
             return page_relevant_jobs, 0
         page_available_jobs = page_response["jobs"]
+        if len(page_available_jobs) == 0:
+            return page_relevant_jobs
         no_of_pages = math.ceil(total_jobs / len(page_available_jobs))
         for job in page_available_jobs:
             if 'req_id' in job['data']:
@@ -1210,7 +1224,7 @@ def for_cisco(keyword, response, search_api_url, session) -> Dict[str, Dict]:
 
     response_total = session.get(
         url=f"https://jobs.cisco.com/jobs/SearchJobsResultsAJAX/{urllib.parse.quote(keyword)}?21178=%5B169482%5D&21178_format=6020&21180=%5B164,163%5D&21180_format=6022&listFilterMode=1")
-    total_jobs = int(response_total.content.strip())
+    total_jobs = int(response_total.content.decode('utf-8').strip().replace('+',''))
     if total_jobs == 0:
         return {}
     no_of_pages = math.ceil(total_jobs / 25)
@@ -1244,6 +1258,8 @@ def for_schnieder_electric(keyword, response, search_api_url, session) -> Dict[s
     """
     def get_relevant_jobs_from_json_response(page_response, keyword):
         page_relevant_jobs = {}
+        if "totalCount" not in page_response:
+            return page_relevant_jobs
         total_jobs = page_response["totalCount"]
         if total_jobs == 0:
             return page_relevant_jobs, 0
@@ -1361,10 +1377,12 @@ def for_tesla(keyword, response) -> Dict[str, Dict]:
 # Oracle Cloud Based Companies
 
 
-def for_oracle_cloud_based_company(page_respone, job_keyword, apply_prefix):
+def for_oracle_cloud_based_company(page_response, job_keyword, apply_prefix):
     relevant_jobs = {}
-    if (len(page_respone["items"]) > 0):
-        available_jobs = page_respone["items"][0]["requisitionList"]
+    if "items" not in page_response:
+        return relevant_jobs
+    if (len(page_response["items"]) > 0):
+        available_jobs = page_response["items"][0]["requisitionList"]
         for job in available_jobs:
             if 'Title' in job:
                 job_id = str(job['Id'])
@@ -2330,6 +2348,8 @@ def smartrecruiters_based_company(company_page_respone, company_job_keyword, ses
                     # get location
                     job_location_data = job_data_soup.find_all(
                         "meta", {"itemprop": "addressCountry"})
+                    if (len(job_location_data) == 0):
+                        return relevant_jobs
                     job_location = job_location_data[0]['content']
                     if job_location:
                         if job_location not in ['United States', 'US', 'USA', 'United States of America', 'San Francisco', 'New York']:
