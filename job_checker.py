@@ -1193,6 +1193,10 @@ def for_cisco(keyword, response, search_api_url, session) -> Dict[str, Dict]:
                             new_response_date.text.strip(), 'html.parser')
                         date_scripts = date_soup.find_all(
                             'script', {'type': 'application/ld+json'})
+                        if len(date_scripts) == 0:
+                            return response_relevant_jobs
+                        if len(date_scripts[0].contents) == 0:
+                            return response_relevant_jobs
                         date_inter = date_scripts[0].contents[0]
                         date_json = json.loads(date_inter)
                         posted_date = datetime.strptime(
