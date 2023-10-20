@@ -1,0 +1,11 @@
+CompanyID,Type,SearchAPI
+1,GET,https://amazon.jobs/en/search.json?schedule_type_id%5B%5D=Full-Time&normalized_country_code%5B%5D=USA&radius=24km&facets%5B%5D=normalized_country_code&facets%5B%5D=normalized_state_name&facets%5B%5D=normalized_city_name&facets%5B%5D=location&facets%5B%5D=business_category&facets%5B%5D=category&facets%5B%5D=schedule_type_id&facets%5B%5D=employee_class&facets%5B%5D=normalized_location&facets%5B%5D=job_function_id&facets%5B%5D=is_manager&facets%5B%5D=is_intern&offset=0&result_limit=100&sort=recent&latitude=38.89037&longitude=-77.03196&loc_group_id=&loc_query=United%20States&base_query={}&city=&country=USA&region=&county=&query_options=&
+2,GET,
+3,GET,https://www.google.com/about/careers/applications/jobs/results/?location=United%20States&sort_by=date&q={}
+4,GET,https://jobs.netflix.com/api/search?q={}&location=Los%20Angeles%2C%20California~Los%20Gatos%2C%20California~New%20York%2C%20New%20York~Salt%20Lake%20City%2C%20Utah~Washington%2C%20DC~Remote%2C%20United%20States~Dallas%2C%20Texas~Remote%2C%20California
+5,GET,
+6,GET,
+7,GET,https://jobs.apple.com/en-us/search?search={}&sort=newest&location=united-states-USA&team=machine-learning-infrastructure-MLAI-MLI+deep-learning-and-reinforcement-learning-MLAI-DLRL+natural-language-processing-and-speech-technologies-MLAI-NLP+computer-vision-MLAI-CV+applied-research-MLAI-AR+machine-learning-and-ai-SFTWR-MCHLN
+8,GET,https://gcsservices.careers.microsoft.com/search/api/v1/search?q={}&lc=United%20States&l=en_us&o=Relevance
+9,GET,https://boards.greenhouse.io/samsungresearchamerica/
+10,GET,https://careers.tencent.com/tencentcareer/api/post/Query?timestamp=1688787924998&countryId=2&cityId=&bgIds=&productId=&categoryId=&parentCategoryId=&attrId=&keyword={}&pageIndex=1&pageSize=100&language=en-us&area=us

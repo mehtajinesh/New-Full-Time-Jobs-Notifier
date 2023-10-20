@@ -1,0 +1,11 @@
+CompanyID,Type,SearchAPI
+81,POST,https://wd1.myworkdaysite.com/wday/cxs/wf/WellsFargoJobs/jobs
+82,POST,https://citi.wd5.myworkdayjobs.com/wday/cxs/citi/2/jobs
+83,POST,https://api-higher.gs.com/gateway/api/v1/graphql
+84,POST,https://santander.wd3.myworkdayjobs.com/wday/cxs/santander/SantanderCareers/jobs
+85,GET,https://morganstanley.eightfold.ai/api/apply/v2/jobs?domain=morganstanley.com&query={}&EmploymentType=full%20time&Country=United%20States%20of%20America&domain=morganstanley.com&sort_by=new
+86,POST,https://statestreet.wd1.myworkdayjobs.com/wday/cxs/statestreet/Global/jobs
+87,GET,https://aexp.eightfold.ai/api/apply/v2/jobs?domain=aexp.com&query={}&location=united%20states&domain=aexp.com&sort_by=relevance
+88,GET,https://hcgn.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions?onlyData=true&expand=requisitionList.secondaryLocations,flexFieldsFacet.values&finder=findReqs;siteNumber=CX_1,facetsList=LOCATIONS%3BWORK_LOCATIONS%3BWORKPLACE_TYPES%3BTITLES%3BCATEGORIES%3BORGANIZATIONS%3BPOSTING_DATES%3BFLEX_FIELDS,limit=25,keyword={},sortBy=POSTING_DATES_DESC
+89,POST,https://db.wd3.myworkdayjobs.com/wday/cxs/db/DBWebsite/jobs
+90,POST,https://careers.tiktok.com/api/v1/search/job/posts?job_category_id_list=&tag_id_list=&location_code_list=CT_100762%2CCT_247%2CCT_100764%2CCT_221%2CCT_100747%2CCT_101443%2CCT_94%2CCT_243%2CCT_104%2CCT_114%2CCT_75%2CCT_130%2CCT_157%2CCT_242%2CCT_233%2CCT_1103355%2CCT_103%2CCT_1000001&subject_id_list=&recruitment_id_list=&portal_type=6&job_function_id_list=&portal_entrance=1&_signature=Ib7KPAAgEARWI1wVOxkUmiG-yiAAEVc

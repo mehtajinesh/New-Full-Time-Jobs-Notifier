@@ -1,0 +1,11 @@
+CompanyID,Type,SearchAPI
+31,GET,
+32,GET,https://careers.se.com/api/jobs?keywords={}&lang=en-US&country=United%2520States&sortBy=relevance&internal=false
+33,GET,https://wd1.myworkdaysite.com/wday/cxs/paypal/jobs
+34,GET,https://workday.wd5.myworkdayjobs.com/wday/cxs/workday/Workday/jobs
+35,GET,https://boards.greenhouse.io/openai
+36,GET,https://lge-careers.com//wp-content/themes/lg-career/assets/api/ajax-search.php?ajax=1&keyword={}&o=pubDate&bookmark=0
+37,GET,https://boards.greenhouse.io/embed/job_board?for=Databricks
+38,GET,
+39,GET,https://jobs.lever.co/plaid/?
+40,GET,https://boards.greenhouse.io/robinhood

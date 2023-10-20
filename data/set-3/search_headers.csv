@@ -1,0 +1,11 @@
+CompanyID|SearchHeader
+21|
+22|
+23|
+24|
+25|
+26|
+27|
+28|{"appliedFacets":{"locationCountry":["bc33aa3152ec42d4995f4791a106ed09"]},"limit":20,"offset":0,"searchText":"{}"}
+29|
+30|{ "appliedFacets": { "locationCountry": [ "bc33aa3152ec42d4995f4791a106ed09" ] }, "limit": 20, "offset": 0, "searchText": "{}" }

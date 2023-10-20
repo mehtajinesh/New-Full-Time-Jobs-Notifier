@@ -1,0 +1,3 @@
+CompanyID|SearchHeader
+111|{ "appliedFacets": { "locationCountry": [ "bc33aa3152ec42d4995f4791a106ed09" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
+112|{ "appliedFacets": { "timeType": [ "46dc96414651014d8c5d839866119300" ] }, "limit": 20, "offset": 0, "searchText": "{}" }

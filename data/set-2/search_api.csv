@@ -1,0 +1,11 @@
+CompanyID,Type,SearchAPI
+11,POST,https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCareerSite/jobs
+12,GET,"https://eeho.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions?onlyData=true&expand=requisitionList.secondaryLocations,flexFieldsFacet.values&finder=findReqs;siteNumber=CX_45001,facetsList=LOCATIONS%3BWORK_LOCATIONS%3BWORKPLACE_TYPES%3BTITLES%3BCATEGORIES%3BORGANIZATIONS%3BPOSTING_DATES%3BFLEX_FIELDS,limit=14,keyword={},lastSelectedFacet=POSTING_DATES,locationId=300000000149325,selectedFlexFieldsFacets=%22AttributeChar6%7C3%20to%205%2B%20years%3B0%20to%202%2B%20years%7C%7CAttributeChar12%7CLess%20than%2010%20applicants%22,selectedLocationsFacet=300000000149325,selectedPostingDatesFacet=7,sortBy=POSTING_DATES_DESC"
+13,POST,https://salesforce.wd12.myworkdayjobs.com/wday/cxs/salesforce/External_Career_Site/jobs
+14,GET,
+15,GET,
+16,POST,https://adobe.wd5.myworkdayjobs.com/wday/cxs/adobe/external_experienced/jobs
+17,GET,https://jobs.intuit.com/search-jobs/{}/United%20States/27595/1/2/6252001/39x76/-98x5/50/2
+18,GET,
+19,POST,https://vmware.wd1.myworkdayjobs.com/wday/cxs/vmware/VMware/jobs
+20,POST,https://www.uber.com/api/loadSearchJobsResults?localeCode=en

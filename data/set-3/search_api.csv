@@ -1,0 +1,11 @@
+CompanyID,Type,SearchAPI
+21,GET,
+22,GET,https://www.atlassian.com/.rest/postings
+23,GET,https://careers.bloomberg.com/job/search?lc=New+York&lc=Princeton&lc=San+Francisco&lc=Chicago&lc=Washington&qf={}
+24,GET,
+25,GET,https://careers.amd.com/api/jobs?country=United%2520States&sortBy=posted_date&keywords={}&descending=true&internal=false
+26,GET,https://jobs.cisco.com/jobs/SearchJobs/{}?21178=%5B169482%5D&21178_format=6020&21180=%5B164%2C163%5D&21180_format=6022&listFilterMode=1
+27,GET,
+28,POST,https://qualcomm.wd5.myworkdayjobs.com/wday/cxs/qualcomm/External/jobs
+29,GET,
+30,POST,https://sonyglobal.wd1.myworkdayjobs.com/wday/cxs/sonyglobal/SonyGlobalCareers/jobs

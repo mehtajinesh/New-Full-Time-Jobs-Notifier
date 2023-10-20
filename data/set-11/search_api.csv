@@ -1,0 +1,11 @@
+CompanyID,Type,SearchAPI
+101,POST,https://carrier.wd5.myworkdayjobs.com/wday/cxs/carrier/jobs/jobs
+102,POST,https://dell.wd1.myworkdayjobs.com/wday/cxs/dell/External/jobs
+103,POST,https://uline.wd1.myworkdayjobs.com/wday/cxs/uline/Uline_Careers/jobs
+104,POST,https://ouryahoo.wd5.myworkdayjobs.com/wday/cxs/ouryahoo/careers/jobs
+105,POST,https://gartner.wd5.myworkdayjobs.com/wday/cxs/gartner/EXT/jobs
+106,POST,https://broadinstitute.wd1.myworkdayjobs.com/wday/cxs/broadinstitute/broad_institute/jobs
+107,POST,https://walmart.wd5.myworkdayjobs.com/wday/cxs/walmart/WalmartExternal/jobs
+108,POST,https://warnerbros.wd5.myworkdayjobs.com/wday/cxs/warnerbros/global/jobs
+109,POST,https://sonyglobal.wd1.myworkdayjobs.com/wday/cxs/sonyglobal/SonyGlobalCareers/jobs
+110,POST,https://spe.wd1.myworkdayjobs.com/wday/cxs/spe/Sonypictures/jobs

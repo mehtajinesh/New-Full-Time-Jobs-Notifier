@@ -429,11 +429,12 @@ def for_apple(keyword: str, response: Dict, session) -> Dict[str, Dict]:
             data = data.replace(";\n", "").strip()
             json_data = json.loads(data)
             total_jobs = json_data['totalRecords']
-            pages = math.ceil(total_jobs / 20)
-            response_available_jobs = json_data['searchResults']
-            url = json_data['fullUrl']
-            response_relevant_jobs = get_relevant_jobs_from_page(
-                response_available_jobs, keyword)
+            if total_jobs:
+                pages = math.ceil(total_jobs / 20)
+                response_available_jobs = json_data['searchResults']
+                url = json_data['fullUrl']
+                response_relevant_jobs = get_relevant_jobs_from_page(
+                    response_available_jobs, keyword)
         return response_relevant_jobs, pages, url
 
     relevant_jobs, no_of_pages, org_url = get_relevant_jobs_from_html_response(

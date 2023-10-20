@@ -1,0 +1,3 @@
+CompanyID,Type,SearchAPI
+111,POST,https://wd1.myworkdaysite.com/wday/cxs/fmr/FidelityCareers/jobs
+112,POST,https://northwesternmutual.wd5.myworkdayjobs.com/wday/cxs/northwesternmutual/CORPORATE-CAREERS/jobs

@@ -1,19 +1,18 @@
 import os
 
 # Known Data
-DATA_FOLDER = 'data'
-COMPANY_NAMES_CSV = os.path.join(DATA_FOLDER, 'company_data.csv')
-COMPANY_SEARCH_API_CSV = os.path.join(DATA_FOLDER, 'search_api.csv')
-COMPANY_KEYWORDS_CSV = os.path.join(DATA_FOLDER, 'keywords.csv')
-COMPANY_KNOWN_JOBS_CSV = os.path.join(DATA_FOLDER, 'already_known_jobs.csv')
-COMPANY_SEARCH_API_HEADER_CSV = os.path.join(DATA_FOLDER, 'search_headers.csv')
-COMPANY_STATUS_CSV = os.path.join(DATA_FOLDER, 'company_status.csv')
-COMPANY_SEARCH_API_EXTRA_HEADER_CSV = os.path.join(
-    DATA_FOLDER, 'search_extra_headers.csv')
+DATA_FOLDER_LOCATION = os.path.join(os.getcwd(),'data')
+COMPANY_NAMES_CSV = 'company_data.csv'
+COMPANY_SEARCH_API_CSV = 'search_api.csv'
+COMPANY_KEYWORDS_CSV = 'keywords.csv'
+COMPANY_KNOWN_JOBS_CSV = 'already_known_jobs.csv'
+COMPANY_SEARCH_API_HEADER_CSV = 'search_headers.csv'
+COMPANY_STATUS_CSV = 'company_status.csv'
+COMPANY_SEARCH_API_EXTRA_HEADER_CSV = 'search_extra_headers.csv'
 
 # Log File Location
 LOG_FOLDER_LOCATION = os.path.join(os.getcwd(), "log")
-LOG_FILE_LOCATION = os.path.join(LOG_FOLDER_LOCATION, "log.log")
+LOG_FILE_NAME = "log.log"
 SLACK_DEPLOYMENT_NOTIFICATION_WEBHOOK_VAR = 'SLACK_DEPLOYMENT_NOTIFICATION_WEBHOOK'
 SLACK_ERROR_NOTIFICATION_WEBHOOK_VAR = 'SLACK_ERROR_NOTIFICATION_WEBHOOK'
 SLACK_JOB_NOTIFICATION_WEBHOOK_VAR = 'SLACK_JOB_NOTIFICATION_WEBHOOK'
@@ -45,5 +44,6 @@ TERMS_TO_IGNORE = [
     "Mechanical",
     "Director",
     "Lead",
-    "Data Engineer"
+    "Data Engineer",
+    "Sales"
 ]

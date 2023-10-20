@@ -1,0 +1,11 @@
+CompanyID,Type,SearchAPI
+91,POST,https://akamaicareers.inflightcloud.com/careersection/rest/jobboard/searchjobs?portal=8200106849&lang=en
+92,GET,https://careers.smartrecruiters.com/BoschGroup/us?search={}
+93,GET,https://jobs.lever.co/lucidmotors
+94,POST,https://kla.wd1.myworkdayjobs.com/wday/cxs/kla/Search/jobs
+95,POST,https://wd1.myworkdaysite.com/en-US/recruiting/snapchat/snap/
+96,POST,https://overstock.wd5.myworkdayjobs.com/wday/cxs/overstock/Overstock_Careers/jobs
+97,POST,https://regions.wd5.myworkdayjobs.com/Regions_Careers/
+98,POST,https://globalhr.wd5.myworkdayjobs.com/REC_RTX_Ext_Gateway/
+99,POST,https://usfoods.wd1.myworkdayjobs.com/wday/cxs/usfoods/usfoodscareersExternal/jobs
+100,POST,https://activision.wd1.myworkdayjobs.com/wday/cxs/activision/King_External_Careers/jobs

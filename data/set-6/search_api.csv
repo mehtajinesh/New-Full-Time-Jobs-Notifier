@@ -1,0 +1,11 @@
+CompanyID,Type,SearchAPI
+51,GET,
+52,GET,
+53,GET,
+54,GET,
+55,GET,
+56,POST,https://hpe.wd5.myworkdayjobs.com/wday/cxs/hpe/Jobsathpe/jobs
+57,GET,
+58,GET,
+59,GET,
+60,GET,

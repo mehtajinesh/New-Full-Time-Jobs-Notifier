@@ -1,0 +1,11 @@
+CompanyID,Type,SearchAPI
+41,POST,https://mastercard.wd1.myworkdayjobs.com/wday/cxs/mastercard/CorporateCareers/jobs
+42,GET,
+43,GET,
+44,GET,
+45,GET,
+46,GET,
+47,GET,
+48,GET,
+49,GET,
+50,GET,

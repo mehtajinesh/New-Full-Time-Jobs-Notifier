@@ -1,0 +1,11 @@
+CompanyID|SearchHeader
+91|{"advancedSearchFiltersSelectionParam":{"searchFilterSelections":[{"id":"LOCATION","selectedValues":[]},{"id":"JOB_FIELD","selectedValues":[]},{"id":"URGENT_JOB","selectedValues":[]},{"id":"EMPLOYEE_STATUS","selectedValues":[]},{"id":"WILL_TRAVEL","selectedValues":[]},{"id":"JOB_SHIFT","selectedValues":[]}]},"fieldData":{"fields":{"JOB_NUMBER":"","JOB_TITLE":"","KEYWORD":"{}"},"valid":true},"filterSelectionParam":{"searchFilterSelections":[{"id":"POSTING_DATE","selectedValues":[]},{"id":"ORGANIZATION","selectedValues":[]},{"id":"LOCATION","selectedValues":["217300106849"]},{"id":"JOB_FIELD","selectedValues":[]},{"id":"JOB_TYPE","selectedValues":[]},{"id":"JOB_SCHEDULE","selectedValues":[]},{"id":"JOB_LEVEL","selectedValues":[]}]},"multilineEnabled":false,"pageNo":1,"sortingSelection":{"ascendingSortingOrder":"false","sortBySelectionParam":"3"}}
+92|
+93|
+94|{ "appliedFacets": { "Country": [ "bc33aa3152ec42d4995f4791a106ed09" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
+95|{ "appliedFacets": { "locations": [ "f84c7a1ec2ba1000d7878e08800c0000", "efe1a865073101ddec60ef19020afc36", "efe1a86507310105e56ad10d020af736", "efe1a8650731016c130aaddd010aed36", "256f279d5e741082c567c24fca236272", "efe1a865073101b9db6c8da7020a6037", "7a68e5b6d6b51001a9de39167c5f0000", "b9cf6982655e1001a9ff7ae350d10000", "a66859edee62017a1bcdc540ea06b51a", "1f0f8aa27ae301b75b751228f47c06fb", "a66859edee62018a4052b8b2ee069d1b", "1763d6f1e9be0121f90261be5b4d856e", "8bf70c1877bb01f58a864a033aab9149", "efe1a865073101e5380680f9020a7437", "2b0a835c9646011d58da08236e4f6726", "efe1a86507310187e01ef207030a7937", "efe1a86507310144a123773b020a0e37" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
+96|{ "appliedFacets": { "timeType": [ "11c2ad25abf4108bc4f679133b7b7167" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
+97|{ "appliedFacets": { "timeType": [ "27b1ad217ce210064ae012703aaf0073" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
+98|
+99|{ "appliedFacets": { "timeType": [ "bd167e5a9d930175f582fa54a82b7600" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
+100|{ "appliedFacets": { "locationCountry": [ "bc33aa3152ec42d4995f4791a106ed09" ] }, "limit": 20, "offset": 0, "searchText": "{}" }
