@@ -1075,6 +1075,8 @@ def for_atlassian(keyword, response) -> Dict[str, Dict]:
         [str, Dict]: relevant jobs
     """
     relevant_jobs = {}
+    if 'postings' not in response:
+        return
     available_jobs = response['postings']
     for job in available_jobs:
         if 'id' in job:
@@ -1197,7 +1199,7 @@ def for_cisco(keyword, response, search_api_url, session) -> Dict[str, Dict]:
                             date_json['datePosted'], "%Y-%m-%d").date()
                         date_difference = today - posted_date
                         if date_difference.days < DAYS_TO_CHECK:
-                            relevant_jobs[job_id] = {
+                            response_relevant_jobs[job_id] = {
                                 'title': curr_job_title, 'posted_date': posted_date,
                                 'apply': job_link}
         return response_relevant_jobs
