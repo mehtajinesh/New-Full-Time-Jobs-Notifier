@@ -814,6 +814,12 @@ def for_goldman_sachs(keyword: str, response: Dict) -> Dict[str, Dict]:
         [str, Dict]: relevant jobs
     """
     relevant_jobs = {}
+    if "data" not in response:
+        return relevant_jobs
+    if "roleSearch" not in response["data"]:
+        return relevant_jobs
+    if "items" not in response["data"]["roleSearch"]:
+        return relevant_jobs
     available_jobs = response["data"]["roleSearch"]["items"]
     for job in available_jobs:
         if 'jobTitle' in job:
