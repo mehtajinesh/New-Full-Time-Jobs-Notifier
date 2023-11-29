@@ -1,0 +1,11 @@
+CompanyID,Type,SearchAPI
+121,POST,https://symbotic.wd1.myworkdayjobs.com/wday/cxs/symbotic/Symbotic/jobs
+122,POST,https://fiserv.wd5.myworkdayjobs.com/wday/cxs/fiserv/EXT/jobs
+123,POST,https://capgroup.wd1.myworkdayjobs.com/wday/cxs/capgroup/capitalgroupcareers/jobs
+124,POST,https://travelers.wd5.myworkdayjobs.com/wday/cxs/travelers/External/jobs
+125,POST,https://wd1.myworkdaysite.com/wday/cxs/ssctech/SSCTechnologies/jobs
+126,POST,https://nike.wd1.myworkdayjobs.com/wday/cxs/nike/nke/jobs
+127,POST,https://fis.wd5.myworkdayjobs.com/wday/cxs/fis/SearchJobs/jobs
+128,POST,
+129,POST,https://athenahealth.wd1.myworkdayjobs.com/wday/cxs/athenahealth/External/jobs
+130,POST,https://manulife.wd3.myworkdayjobs.com/wday/cxs/manulife/MFCJH_Jobs/jobs

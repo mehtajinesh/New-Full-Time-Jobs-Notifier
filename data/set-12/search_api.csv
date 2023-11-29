@@ -1,3 +1,11 @@
 CompanyID,Type,SearchAPI
 111,POST,https://wd1.myworkdaysite.com/wday/cxs/fmr/FidelityCareers/jobs
 112,POST,https://northwesternmutual.wd5.myworkdayjobs.com/wday/cxs/northwesternmutual/CORPORATE-CAREERS/jobs
+113,POST,https://remitly.wd5.myworkdayjobs.com/wday/cxs/remitly/Remitly_Careers/jobs
+114,POST,https://cvshealth.wd1.myworkdayjobs.com/wday/cxs/cvshealth/CVS_Health_Careers/jobs
+115,POST,https://sec.wd3.myworkdayjobs.com/wday/cxs/sec/Samsung_Careers/jobs
+116,POST,https://bmc.wd1.myworkdayjobs.com/wday/cxs/bmc/BMC/jobs
+117,POST,https://takeda.wd3.myworkdayjobs.com/wday/cxs/takeda/External/jobs
+118,POST,https://ameriprise.wd5.myworkdayjobs.com/wday/cxs/ameriprise/Ameriprise/jobs
+119,POST,https://ancestry.wd5.myworkdayjobs.com/wday/cxs/ancestry/Careers/jobs
+120,POST,https://relx.wd3.myworkdayjobs.com/wday/cxs/relx/LexisNexisLegal/jobs

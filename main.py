@@ -226,7 +226,7 @@ def main():
             logging.error(f'Error occurred: {e}')
             # send error notification to user
             send_error_notification_to_user(
-                f"{current_date_time} - {traceback.format_exc()}", session)
+                f"{set_name} - {current_date_time} - {traceback.format_exc()}", session)
     current_date_time = datetime.now()
     total_time = (current_date_time - start_time)
     logging.info(f"Total Time Taken: {total_time}")            

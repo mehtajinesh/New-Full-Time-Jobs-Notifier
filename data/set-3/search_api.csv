@@ -8,4 +8,4 @@ CompanyID,Type,SearchAPI
 27,GET,
 28,POST,https://qualcomm.wd5.myworkdayjobs.com/wday/cxs/qualcomm/External/jobs
 29,GET,
-30,POST,https://sonyglobal.wd1.myworkdayjobs.com/wday/cxs/sonyglobal/SonyGlobalCareers/jobs
+30,GET,

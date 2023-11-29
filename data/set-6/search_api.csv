@@ -6,6 +6,6 @@ CompanyID,Type,SearchAPI
 55,GET,
 56,POST,https://hpe.wd5.myworkdayjobs.com/wday/cxs/hpe/Jobsathpe/jobs
 57,GET,
-58,GET,
+58,POST,https://motorolasolutions.wd5.myworkdayjobs.com/wday/cxs/motorolasolutions/Careers/jobs
 59,GET,
 60,GET,
